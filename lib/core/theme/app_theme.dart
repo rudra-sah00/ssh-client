@@ -5,9 +5,56 @@ import 'package:google_fonts/google_fonts.dart';
 abstract class AppTheme {
   static const _radius = 16.0;
   static const _accent = Color(0xFFB0B0B0);
+  static const _blue = Color(0xFF4A9EFF);
 
-  static ThemeData get light => dark;
+  // ── Light ──
+  static ThemeData get light {
+    final base = FlexThemeData.light(
+      colors: const FlexSchemeColor(
+        primary: _blue,
+        primaryContainer: Color(0xFFE8F0FE),
+        secondary: Color(0xFF6B6B6B),
+        secondaryContainer: Color(0xFFEEEEEE),
+        tertiary: Color(0xFF8E8E8E),
+        tertiaryContainer: Color(0xFFF5F5F5),
+      ),
+      surfaceMode: FlexSurfaceMode.level,
+      blendLevel: 0,
+      subThemesData: _sub,
+      useMaterial3: true,
+      textTheme: GoogleFonts.interTextTheme(),
+    );
+    return base.copyWith(
+      scaffoldBackgroundColor: const Color(0xFFF2F2F7),
+      colorScheme: base.colorScheme.copyWith(
+        surface: const Color(0xFFF2F2F7),
+        onSurface: Colors.black,
+      ),
+      appBarTheme: base.appBarTheme.copyWith(
+        backgroundColor: const Color(0xFFF2F2F7),
+        surfaceTintColor: Colors.transparent,
+        foregroundColor: Colors.black,
+      ),
+      cardTheme: base.cardTheme.copyWith(
+        color: Colors.white,
+        surfaceTintColor: Colors.transparent,
+      ),
+      dialogTheme: base.dialogTheme.copyWith(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+      ),
+      bottomSheetTheme: base.bottomSheetTheme.copyWith(backgroundColor: Colors.white),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: Color(0xFFF2F2F7),
+        selectedItemColor: _blue,
+        unselectedItemColor: Color(0xFF999999),
+      ),
+      splashFactory: InkSparkle.splashFactory,
+      pageTransitionsTheme: _transitions,
+    );
+  }
 
+  // ── Dark ──
   static ThemeData get dark {
     final base = FlexThemeData.dark(
       colors: const FlexSchemeColor(
@@ -47,8 +94,11 @@ abstract class AppTheme {
         backgroundColor: const Color(0xFF111111),
         surfaceTintColor: Colors.transparent,
       ),
-      bottomSheetTheme: base.bottomSheetTheme.copyWith(
-        backgroundColor: const Color(0xFF111111),
+      bottomSheetTheme: base.bottomSheetTheme.copyWith(backgroundColor: const Color(0xFF111111)),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: Colors.black,
+        selectedItemColor: _blue,
+        unselectedItemColor: Colors.white38,
       ),
       splashFactory: InkSparkle.splashFactory,
       pageTransitionsTheme: _transitions,
@@ -72,7 +122,6 @@ abstract class AppTheme {
     dialogRadius: 24,
     appBarCenterTitle: true,
     appBarScrolledUnderElevation: 0,
-    navigationBarIndicatorSchemeColor: SchemeColor.primary,
     bottomSheetRadius: 24,
     snackBarRadius: 12,
     snackBarBackgroundSchemeColor: SchemeColor.inverseSurface,
@@ -90,4 +139,12 @@ abstract class AppTheme {
       GoogleFonts.jetBrainsMono().fontFamily ?? 'monospace';
 
   static TextStyle get terminalStyle => GoogleFonts.jetBrainsMono(fontSize: 14);
+
+  static ThemeMode resolveThemeMode(String mode) {
+    return switch (mode) {
+      'light' => ThemeMode.light,
+      'dark' => ThemeMode.dark,
+      _ => ThemeMode.system,
+    };
+  }
 }

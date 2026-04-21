@@ -3,9 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ssh_client/data/models/connection/connection_model.dart';
 import 'package:ssh_client/data/providers/providers.dart';
 
-const _fieldColor = Color(0xFF1C1C1E);
 const _accent = Color(0xFF4A9EFF);
-const _labelColor = Colors.white54;
 
 class AddEditConnectionScreen extends ConsumerStatefulWidget {
   final ConnectionModel? existing;
@@ -70,6 +68,10 @@ class _State extends ConsumerState<AddEditConnectionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final fieldColor = isDark ? const Color(0xFF1C1C1E) : const Color(0xFFF2F2F7);
+    final bgColor = isDark ? Colors.black : const Color(0xFFF2F2F7);
+
     final content = ListView(
       controller: widget.scrollController,
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 40),
@@ -125,7 +127,7 @@ class _State extends ConsumerState<AddEditConnectionScreen> {
         const SizedBox(height: 12),
         // Password / Key toggle
         Container(
-          decoration: BoxDecoration(color: _fieldColor, borderRadius: BorderRadius.circular(10)),
+          decoration: BoxDecoration(color: fieldColor, borderRadius: BorderRadius.circular(10)),
           child: Row(
             children: [
               _toggleTab('Password', !_useKey, () => setState(() => _useKey = false)),
@@ -162,7 +164,7 @@ class _State extends ConsumerState<AddEditConnectionScreen> {
                 child: Container(
                   height: 50,
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(color: _fieldColor, borderRadius: BorderRadius.circular(12)),
+                  decoration: BoxDecoration(color: fieldColor, borderRadius: BorderRadius.circular(12)),
                   child: const Text('Cancel', style: TextStyle(color: _accent, fontSize: 17, fontWeight: FontWeight.w500)),
                 ),
               ),
@@ -174,7 +176,7 @@ class _State extends ConsumerState<AddEditConnectionScreen> {
                 child: Container(
                   height: 50,
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(color: _fieldColor, borderRadius: BorderRadius.circular(12)),
+                  decoration: BoxDecoration(color: fieldColor, borderRadius: BorderRadius.circular(12)),
                   child: const Text('Save', style: TextStyle(color: _accent, fontSize: 17, fontWeight: FontWeight.w500)),
                 ),
               ),
@@ -185,7 +187,7 @@ class _State extends ConsumerState<AddEditConnectionScreen> {
     );
 
     if (widget.scrollController != null) return content;
-    return Scaffold(backgroundColor: Colors.black, body: SafeArea(child: content));
+    return Scaffold(backgroundColor: bgColor, body: SafeArea(child: content));
   }
 
   Widget _sectionHeader(String title, IconData icon) {
@@ -201,7 +203,7 @@ class _State extends ConsumerState<AddEditConnectionScreen> {
   Widget _label(String text) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 6),
-      child: Text(text, style: const TextStyle(color: _labelColor, fontSize: 13)),
+      child: Text(text, style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white54 : Colors.black54, fontSize: 13)),
     );
   }
 
@@ -213,27 +215,30 @@ class _State extends ConsumerState<AddEditConnectionScreen> {
     TextInputType? keyboardType,
     int maxLines = 1,
   }) {
+    final d = Theme.of(context).brightness == Brightness.dark;
     return Container(
-      decoration: BoxDecoration(color: _fieldColor, borderRadius: BorderRadius.circular(10)),
+      decoration: BoxDecoration(color: d ? const Color(0xFF1C1C1E) : const Color(0xFFF2F2F7), borderRadius: BorderRadius.circular(10)),
       child: TextField(
         controller: controller,
         obscureText: obscure,
         keyboardType: keyboardType,
         maxLines: maxLines,
-        style: const TextStyle(color: Colors.white, fontSize: 16),
+        style: TextStyle(color: d ? Colors.white : Colors.black, fontSize: 16),
         decoration: InputDecoration(
           hintText: hint,
-          hintStyle: const TextStyle(color: Colors.white24),
+          hintStyle: TextStyle(color: d ? Colors.white24 : Colors.black26),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
           suffixText: trailing,
-          suffixStyle: const TextStyle(color: Colors.white30, fontSize: 13),
+          suffixStyle: TextStyle(color: d ? Colors.white30 : Colors.black38, fontSize: 13),
         ),
       ),
     );
   }
 
   Widget _toggleTab(String label, bool active, VoidCallback onTap) {
+    final d = Theme.of(context).brightness == Brightness.dark;
+    final fg = d ? Colors.white : Colors.black;
     return Expanded(
       child: GestureDetector(
         onTap: onTap,
@@ -241,11 +246,11 @@ class _State extends ConsumerState<AddEditConnectionScreen> {
           height: 36,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: active ? Colors.white12 : Colors.transparent,
+            color: active ? fg.withValues(alpha: 0.08) : Colors.transparent,
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(label, style: TextStyle(
-            color: active ? Colors.white : Colors.white38,
+            color: active ? fg : fg.withValues(alpha: 0.38),
             fontSize: 14,
             fontWeight: active ? FontWeight.w600 : FontWeight.normal,
           )),

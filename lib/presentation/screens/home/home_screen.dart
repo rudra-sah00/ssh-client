@@ -34,7 +34,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,9 +54,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
 
             // Big title
-            const Padding(
-              padding: EdgeInsets.fromLTRB(20, 0, 20, 16),
-              child: Text('Servers', style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold, color: Colors.white)),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+              child: Text('Servers', style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface)),
             ),
 
             // Search (only when many connections)
@@ -66,14 +66,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 child: TextField(
                   decoration: InputDecoration(
                     hintText: 'Search...',
-                    hintStyle: const TextStyle(color: Colors.white30),
-                    prefixIcon: const Icon(Icons.search, color: Colors.white30),
+                    hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.3)),
+                    prefixIcon: Icon(Icons.search, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.3)),
                     filled: true,
-                    fillColor: const Color(0xFF1C1C1E),
+                    fillColor: Theme.of(context).cardTheme.color,
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
                     contentPadding: const EdgeInsets.symmetric(vertical: 0),
                   ),
-                  style: const TextStyle(color: Colors.white),
+                  style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                   onChanged: (v) => setState(() => _search = v),
                 ),
               ),
@@ -87,7 +87,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   if (filtered.isNotEmpty)
                     Container(
                       decoration: BoxDecoration(
-                        color: const Color(0xFF1C1C1E),
+                        color: Theme.of(context).cardTheme.color,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
@@ -99,7 +99,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               onEdit: () => _openAddSheet(filtered[i]),
                             ),
                             if (i < filtered.length - 1)
-                              const Divider(height: 1, indent: 16, endIndent: 16, color: Colors.white10),
+                              Divider(height: 1, indent: 16, endIndent: 16, color: Theme.of(context).dividerColor.withValues(alpha: 0.1)),
                           ],
                         ],
                       ),
@@ -127,7 +127,7 @@ class _ServerRow extends ConsumerWidget {
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       title: Text(
         '${connection.host}:${connection.port}',
-        style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
+        style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 16, fontWeight: FontWeight.w500),
       ),
       subtitle: Text(
         'ssh ${connection.username}@${connection.host} -p ${connection.port}',

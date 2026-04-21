@@ -21,6 +21,8 @@ SettingsModel _$SettingsModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$SettingsModel {
+  String get themeMode =>
+      throw _privateConstructorUsedError; // 'system', 'light', 'dark'
   double get terminalFontSize => throw _privateConstructorUsedError;
   bool get keepAlive => throw _privateConstructorUsedError;
   int get keepAliveInterval => throw _privateConstructorUsedError;
@@ -44,6 +46,7 @@ abstract class $SettingsModelCopyWith<$Res> {
   ) = _$SettingsModelCopyWithImpl<$Res, SettingsModel>;
   @useResult
   $Res call({
+    String themeMode,
     double terminalFontSize,
     bool keepAlive,
     int keepAliveInterval,
@@ -66,6 +69,7 @@ class _$SettingsModelCopyWithImpl<$Res, $Val extends SettingsModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? themeMode = null,
     Object? terminalFontSize = null,
     Object? keepAlive = null,
     Object? keepAliveInterval = null,
@@ -73,6 +77,10 @@ class _$SettingsModelCopyWithImpl<$Res, $Val extends SettingsModel>
   }) {
     return _then(
       _value.copyWith(
+            themeMode: null == themeMode
+                ? _value.themeMode
+                : themeMode // ignore: cast_nullable_to_non_nullable
+                      as String,
             terminalFontSize: null == terminalFontSize
                 ? _value.terminalFontSize
                 : terminalFontSize // ignore: cast_nullable_to_non_nullable
@@ -105,6 +113,7 @@ abstract class _$$SettingsModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
+    String themeMode,
     double terminalFontSize,
     bool keepAlive,
     int keepAliveInterval,
@@ -126,6 +135,7 @@ class __$$SettingsModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? themeMode = null,
     Object? terminalFontSize = null,
     Object? keepAlive = null,
     Object? keepAliveInterval = null,
@@ -133,6 +143,10 @@ class __$$SettingsModelImplCopyWithImpl<$Res>
   }) {
     return _then(
       _$SettingsModelImpl(
+        themeMode: null == themeMode
+            ? _value.themeMode
+            : themeMode // ignore: cast_nullable_to_non_nullable
+                  as String,
         terminalFontSize: null == terminalFontSize
             ? _value.terminalFontSize
             : terminalFontSize // ignore: cast_nullable_to_non_nullable
@@ -158,6 +172,7 @@ class __$$SettingsModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$SettingsModelImpl implements _SettingsModel {
   const _$SettingsModelImpl({
+    this.themeMode = 'system',
     this.terminalFontSize = 14.0,
     this.keepAlive = true,
     this.keepAliveInterval = 30,
@@ -167,6 +182,10 @@ class _$SettingsModelImpl implements _SettingsModel {
   factory _$SettingsModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$SettingsModelImplFromJson(json);
 
+  @override
+  @JsonKey()
+  final String themeMode;
+  // 'system', 'light', 'dark'
   @override
   @JsonKey()
   final double terminalFontSize;
@@ -182,7 +201,7 @@ class _$SettingsModelImpl implements _SettingsModel {
 
   @override
   String toString() {
-    return 'SettingsModel(terminalFontSize: $terminalFontSize, keepAlive: $keepAlive, keepAliveInterval: $keepAliveInterval, connectionTimeout: $connectionTimeout)';
+    return 'SettingsModel(themeMode: $themeMode, terminalFontSize: $terminalFontSize, keepAlive: $keepAlive, keepAliveInterval: $keepAliveInterval, connectionTimeout: $connectionTimeout)';
   }
 
   @override
@@ -190,6 +209,8 @@ class _$SettingsModelImpl implements _SettingsModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SettingsModelImpl &&
+            (identical(other.themeMode, themeMode) ||
+                other.themeMode == themeMode) &&
             (identical(other.terminalFontSize, terminalFontSize) ||
                 other.terminalFontSize == terminalFontSize) &&
             (identical(other.keepAlive, keepAlive) ||
@@ -204,6 +225,7 @@ class _$SettingsModelImpl implements _SettingsModel {
   @override
   int get hashCode => Object.hash(
     runtimeType,
+    themeMode,
     terminalFontSize,
     keepAlive,
     keepAliveInterval,
@@ -226,6 +248,7 @@ class _$SettingsModelImpl implements _SettingsModel {
 
 abstract class _SettingsModel implements SettingsModel {
   const factory _SettingsModel({
+    final String themeMode,
     final double terminalFontSize,
     final bool keepAlive,
     final int keepAliveInterval,
@@ -235,6 +258,8 @@ abstract class _SettingsModel implements SettingsModel {
   factory _SettingsModel.fromJson(Map<String, dynamic> json) =
       _$SettingsModelImpl.fromJson;
 
+  @override
+  String get themeMode; // 'system', 'light', 'dark'
   @override
   double get terminalFontSize;
   @override
