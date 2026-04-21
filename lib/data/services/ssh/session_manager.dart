@@ -64,17 +64,17 @@ class SessionManager {
 
     await sshService.connect(connection);
 
-    // Bind SSH output → terminal
+    // Bind SSH output to terminal
     sshService.output.listen((data) {
       terminal.write(String.fromCharCodes(data));
     });
 
-    // Bind terminal input → SSH
+    // Bind terminal input to SSH
     terminal.onOutput = (data) {
       sshService.write(Uint8List.fromList(data.codeUnits));
     };
 
-    // Bind terminal resize → SSH
+    // Bind terminal resize to SSH
     terminal.onResize = (w, h, pw, ph) {
       sshService.resizeTerminal(w, h);
     };

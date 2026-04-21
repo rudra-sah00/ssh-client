@@ -147,7 +147,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
           const SizedBox(height: 8),
           if (_search.isEmpty)
-            Text('Tap + New to add or ⚡ for quick connect',
+            Text('Tap + New to add or Quick Connect to get started',
                 style: TextStyle(color: cs.onSurfaceVariant)),
         ],
       ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.1),
