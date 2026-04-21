@@ -1,5 +1,5 @@
+import 'package:circle_nav_bar/circle_nav_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:ssh_client/presentation/screens/home/home_screen.dart';
 import 'package:ssh_client/presentation/screens/snippet/snippet_screen.dart';
 import 'package:ssh_client/presentation/screens/settings/settings_screen.dart';
@@ -13,48 +13,53 @@ class AppShell extends StatefulWidget {
 
 class _AppShellState extends State<AppShell> {
   int _index = 0;
+  final _pageController = PageController();
 
-  final _screens = const [
-    HomeScreen(),
-    SnippetScreen(),
-    SettingsScreen(),
-  ];
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-
     return Scaffold(
-      body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 250),
-        child: _screens[_index],
-      ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _index,
-        onDestinationSelected: (i) => setState(() => _index = i),
-        backgroundColor: Colors.black,
-        surfaceTintColor: Colors.transparent,
-        indicatorColor: cs.primary.withValues(alpha: 0.15),
-        height: 64,
-        labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.dns_outlined),
-            selectedIcon: Icon(Icons.dns_rounded),
-            label: 'Connections',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.code_outlined),
-            selectedIcon: Icon(Icons.code_rounded),
-            label: 'Snippets',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.settings_outlined),
-            selectedIcon: Icon(Icons.settings_rounded),
-            label: 'Settings',
-          ),
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (i) => setState(() => _index = i),
+        children: const [
+          HomeScreen(),
+          SnippetScreen(),
+          SettingsScreen(),
         ],
-      ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.3, duration: 300.ms),
+      ),
+      bottomNavigationBar: CircleNavBar(
+        activeIcons: const [
+          Icon(Icons.dns_rounded, color: Colors.black),
+          Icon(Icons.code_rounded, color: Colors.black),
+          Icon(Icons.settings_rounded, color: Colors.black),
+        ],
+        inactiveIcons: const [
+          Icon(Icons.dns_outlined, color: Colors.white54),
+          Icon(Icons.code_outlined, color: Colors.white54),
+          Icon(Icons.settings_outlined, color: Colors.white54),
+        ],
+        height: 60,
+        circleWidth: 50,
+        color: const Color(0xFF0F0F0F),
+        circleColor: const Color(0xFF00E676),
+        activeIndex: _index,
+        onTap: (i) {
+          setState(() => _index = i);
+          _pageController.animateToPage(i,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut);
+        },
+        padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+        cornerRadius: const BorderRadius.all(Radius.circular(24)),
+        shadowColor: Colors.transparent,
+        elevation: 0,
+      ),
     );
   }
 }
