@@ -40,6 +40,13 @@ dev_dependencies:
   build_runner: ^2.4.8
   freezed: ^2.5.2
   json_serializable: ^6.7.1
+  flutter_launcher_icons: ^0.14.4
 
 flutter:
   uses-material-design: true
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon.png"
+  remove_alpha_ios: true

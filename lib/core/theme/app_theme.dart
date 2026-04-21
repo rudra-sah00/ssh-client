@@ -8,6 +8,8 @@ abstract class AppTheme {
 
   // ── Light ──
   static ThemeData get light {
+    final bodyText = GoogleFonts.interTextTheme();
+    final titleText = GoogleFonts.spaceGroteskTextTheme();
     final base = FlexThemeData.light(
       colors: const FlexSchemeColor(
         primary: _accent,
@@ -21,7 +23,16 @@ abstract class AppTheme {
       blendLevel: 0,
       subThemesData: _sub,
       useMaterial3: true,
-      textTheme: GoogleFonts.interTextTheme(),
+      textTheme: bodyText.copyWith(
+        displayLarge: titleText.displayLarge,
+        displayMedium: titleText.displayMedium,
+        displaySmall: titleText.displaySmall,
+        headlineLarge: titleText.headlineLarge,
+        headlineMedium: titleText.headlineMedium,
+        headlineSmall: titleText.headlineSmall,
+        titleLarge: titleText.titleLarge,
+        titleMedium: titleText.titleMedium,
+      ),
     );
     return base.copyWith(
       scaffoldBackgroundColor: const Color(0xFFF2F2F7),
@@ -55,6 +66,9 @@ abstract class AppTheme {
 
   // ── Dark ──
   static ThemeData get dark {
+    final darkBase = ThemeData.dark();
+    final bodyText = GoogleFonts.interTextTheme(darkBase.textTheme);
+    final titleText = GoogleFonts.spaceGroteskTextTheme(darkBase.textTheme);
     final base = FlexThemeData.dark(
       colors: const FlexSchemeColor(
         primary: _accent,
@@ -69,7 +83,16 @@ abstract class AppTheme {
       blendLevel: 0,
       subThemesData: _sub,
       useMaterial3: true,
-      textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme),
+      textTheme: bodyText.copyWith(
+        displayLarge: titleText.displayLarge,
+        displayMedium: titleText.displayMedium,
+        displaySmall: titleText.displaySmall,
+        headlineLarge: titleText.headlineLarge,
+        headlineMedium: titleText.headlineMedium,
+        headlineSmall: titleText.headlineSmall,
+        titleLarge: titleText.titleLarge,
+        titleMedium: titleText.titleMedium,
+      ),
     );
     return base.copyWith(
       scaffoldBackgroundColor: Colors.black,

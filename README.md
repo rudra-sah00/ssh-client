@@ -33,6 +33,12 @@ A production-ready Flutter SSH client with interactive terminal, secure credenti
 | Security | `flutter_secure_storage ^9.0.0` |
 | Models | `freezed_annotation` + `json_annotation` |
 
+## Typography
+
+- **Titles & Headings** — Space Grotesk
+- **Body Text** — Inter
+- **Terminal** — JetBrains Mono
+
 ## Architecture
 
 Clean Architecture with Riverpod — see [SYSTEM_DESIGN.md](SYSTEM_DESIGN.md) for full details.

@@ -51,8 +51,9 @@ A production-ready Flutter SSH client supporting password & key-based authentica
 - `settingsProvider` — app preferences
 
 ### 3.5 Theming (`flex_color_scheme` + `google_fonts`)
-- Light/dark mode with FlexColorScheme
-- Inter for UI, JetBrains Mono for terminal
+- Dark/light mode toggle with FlexColorScheme
+- Space Grotesk for titles/headings, Inter for body, JetBrains Mono for terminal
+- Custom app icon from assets/icon.png
 - Animated transitions via `flutter_animate`
 
 ### 3.6 Multi-Session Manager

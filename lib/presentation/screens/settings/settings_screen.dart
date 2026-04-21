@@ -33,23 +33,17 @@ class SettingsScreen extends ConsumerWidget {
             color: cardColor,
             children: [
               _CardHeader(icon: Icons.brightness_6_outlined, title: 'Theme'),
-              Text('Select the color scheme of the application', style: TextStyle(color: labelColor, fontSize: 13)),
-              const Divider(height: 24),
-              _ThemeOption(
-                label: 'Follow System',
-                selected: settings.themeMode == 'system',
-                onTap: () => notifier.update(settings.copyWith(themeMode: 'system')),
-              ),
-              _ThemeOption(
-                label: 'Light Mode',
-                selected: settings.themeMode == 'light',
-                onTap: () => notifier.update(settings.copyWith(themeMode: 'light')),
-                trailing: const Icon(Icons.wb_sunny_outlined, color: _grey, size: 20),
-              ),
-              _ThemeOption(
-                label: 'Dark Mode',
-                selected: settings.themeMode == 'dark',
-                onTap: () => notifier.update(settings.copyWith(themeMode: 'dark')),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(settings.themeMode == 'dark' ? 'Dark Mode' : 'Light Mode', style: const TextStyle(fontSize: 16)),
+                  Switch.adaptive(
+                    value: settings.themeMode == 'dark',
+                    activeColor: _grey,
+                    onChanged: (v) => notifier.update(settings.copyWith(themeMode: v ? 'dark' : 'light')),
+                  ),
+                ],
               ),
             ],
           ),
@@ -260,40 +254,6 @@ class _CardHeader extends StatelessWidget {
           const SizedBox(width: 8),
           Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
         ],
-      ),
-    );
-  }
-}
-
-class _ThemeOption extends StatelessWidget {
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-  final Widget? trailing;
-  const _ThemeOption({required this.label, required this.selected, required this.onTap, this.trailing});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(
-                label,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: selected ? _grey : null,
-                  fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
-                ),
-              ),
-            ),
-            if (trailing != null) trailing!,
-          ],
-        ),
       ),
     );
   }
