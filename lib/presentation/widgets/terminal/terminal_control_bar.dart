@@ -61,6 +61,22 @@ class _TerminalControlBarState extends State<TerminalControlBar> {
             _key('/', '/'),
             _key('-', '-'),
             _key('~', '~'),
+            // Dismiss keyboard
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 2),
+              child: Material(
+                color: Theme.of(context).colorScheme.surfaceContainer,
+                borderRadius: BorderRadius.circular(6),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(6),
+                  onTap: () => FocusScope.of(context).unfocus(),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                    child: Icon(Icons.keyboard_hide_rounded, size: 18),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
