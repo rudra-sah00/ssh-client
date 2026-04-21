@@ -8,17 +8,16 @@ A production-ready Flutter SSH client with interactive terminal, secure credenti
 - **Terminal Emulator** — Full PTY terminal using `xterm` widget
 - **Multi-Session** — Multiple concurrent SSH sessions with tab switching
 - **Background Keep-Alive** — Configurable heartbeat prevents idle disconnect
+- **Auto-Reconnect** — Detects dead socket on app resume, reconnects with tmux reattach
 - **Mobile Keyboard** — Ctrl, Alt, Esc, Tab, arrows, F-keys, and common chars
-- **Quick Connect** — One-time connections without saving
-- **Connection Management** — Save, edit, duplicate, delete with confirmations
+- **Connection Management** — Save, edit, delete with confirmations
 - **Search & Filter** — Find connections instantly as your list grows
 - **Secure Storage** — Credentials encrypted with platform keychain/keystore
-- **Theming** — Dark/light modes with `flex_color_scheme`, monospace terminal font
+- **Theming** — Dark/light toggle with `flex_color_scheme`
 - **No Auth Required** — Pure client-side, anonymous, no backend
 - **SFTP File Browser** — Browse, view, rename, delete remote files and create folders
 - **SSH Tunneling** — Local and remote port forwarding with live tunnel management
-- **Snippet Manager** — Save and quick-send frequently used commands
-- **Connection Groups & Tags** — Organize connections with groups and tags, filter by group
+- **Snippet Manager** — Save frequently used commands (Settings > Manage Snippets)
 - **Export/Import** — Backup and restore connections via JSON clipboard
 
 ## Tech Stack
@@ -45,9 +44,9 @@ Clean Architecture with Riverpod — see [SYSTEM_DESIGN.md](SYSTEM_DESIGN.md) fo
 
 ```
 lib/
-├── core/          # Constants, theme, router, errors, utils
-├── data/          # Models, providers, repositories, services
-└── presentation/  # Screens, widgets, common components
+├── core/          # Constants, theme, router, errors
+├── data/          # Models, providers, services
+└── presentation/  # Screens, widgets
 ```
 
 ## Getting Started

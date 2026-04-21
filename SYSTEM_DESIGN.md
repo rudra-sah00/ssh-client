@@ -26,7 +26,7 @@ A production-ready Flutter SSH client with interactive terminal, SFTP browser, S
 
 ## 3. Navigation
 
-Three-tab bottom navigation (no animation on switch):
+Three-tab bottom navigation (instant switch, no animation):
 
 | Tab | Screen | Description |
 |---|---|---|
@@ -34,7 +34,7 @@ Three-tab bottom navigation (no animation on switch):
 | Sessions | `SessionsScreen` | Active SSH sessions, resume/disconnect |
 | Settings | `SettingsScreen` | Theme, terminal, connection, snippets, data |
 
-Additional push routes: Terminal, Add/Edit Server, SFTP Browser, Tunnels, Snippets.
+Additional push routes: Terminal, Add/Edit Server (slide right-to-left), SFTP Browser, Tunnels, Snippets.
 
 ## 4. Core Modules
 
@@ -57,34 +57,43 @@ Additional push routes: Terminal, Add/Edit Server, SFTP Browser, Tunnels, Snippe
 - Each session owns: `SshServiceImpl` + `Terminal` + keep-alive timer
 - UI rebuilds automatically via `ChangeNotifierProvider`
 
-### 4.4 Connection Management
+### 4.4 Auto-Reconnect
+- `WidgetsBindingObserver` detects `AppLifecycleState.resumed`
+- If SSH socket is dead, reconnects using same `Terminal` instance (preserves scrollback)
+- Shows `[Connection lost]` / `[Reconnected]` messages in terminal
+- Auto-runs `tmux attach` if tmux session exists on server
+
+### 4.5 Connection Management
 - CRUD operations for saved connections
 - Credentials encrypted via `flutter_secure_storage` (Keychain/Keystore)
-- Connection model: host, port, username, password/key, group, tags
+- Connection model fields: `id`, `name`, `host`, `port`, `username`, `password`, `privateKeyPath`, `passphrase`, `useKeyAuth`, `lastConnected`, `group`, `tags`
 - Freezed immutability + JSON serialization
 - Long-press for edit/delete actions
+- Search by name and host
 
-### 4.5 State Management (`riverpod`)
+### 4.6 State Management (`riverpod`)
 - `connectionListProvider` — saved connections (StateNotifier + secure storage)
-- `sessionManagerProvider` — active SSH sessions (ChangeNotifier)
+- `sessionManagerProvider` — active SSH sessions (ChangeNotifierProvider)
 - `settingsProvider` — app preferences (StateNotifier + secure storage)
 - `snippetListProvider` — saved command snippets (StateNotifier + secure storage)
 
-### 4.6 Theming
+### 4.7 Theming
 - Dark/light mode toggle (Switch in Settings)
+- Default: system theme on first launch, then user's choice persisted
 - `flex_color_scheme` for consistent Material 3 theming
-- Grey accent palette (`#8E8E93`) — no blue, no green
-- Dark: pure black `#000000`, cards `#1C1C1E`
+- Grey accent palette (`#8E8E93`)
+- Dark: pure black `#000000`, cards `#0F0F0F` (theme) / `#1C1C1E` (settings)
 - Light: iOS grey `#F2F2F7`, white cards
 
-### 4.7 Typography
+### 4.8 Typography
 - **Titles & Headings** — Space Grotesk
 - **Body Text** — Inter
 - **Terminal** — JetBrains Mono
 
-### 4.8 Background Keep-Alive
+### 4.9 Background Keep-Alive
 - Per-session periodic timer prevents idle disconnect
 - Configurable interval (default 30s) and max session duration (0 = forever)
+- Connection timeout setting (default 30s)
 - Toggle on/off in Settings
 - Timer auto-cancels on session close
 
@@ -101,7 +110,12 @@ User taps server in Servers tab
     → Bind: Terminal.onResize → SSH resize
   → Push TerminalScreen with session
   → User presses back → session stays alive in SessionManager
-  → Sessions tab shows active session with blue dot
+  → Sessions tab shows active session
+
+App goes to background → iOS suspends socket
+  → User returns → WidgetsBindingObserver detects resume
+  → Socket dead? → reconnectSession() with same Terminal
+  → tmux available? → auto-attach
 ```
 
 ## 6. Security
@@ -120,7 +134,7 @@ lib/
 ├── core/
 │   ├── constants/       # App-wide constants
 │   ├── errors/          # Custom exceptions (sealed class)
-│   ├── router/          # Named routes + transitions
+│   ├── router/          # Named routes + slide transitions
 │   └── theme/           # FlexColorScheme dark/light config
 ├── data/
 │   ├── models/
@@ -142,7 +156,7 @@ lib/
     │   ├── sftp/        # SFTP file browser
     │   ├── shell/       # Bottom nav shell (IndexedStack)
     │   ├── snippet/     # Snippet manager
-    │   ├── terminal/    # Terminal with xterm
+    │   ├── terminal/    # Terminal with xterm + auto-reconnect
     │   └── tunnel/      # SSH tunnel manager
     └── widgets/
         └── terminal/    # Mobile control bar
