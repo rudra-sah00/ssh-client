@@ -23,7 +23,6 @@ dependencies:
   google_fonts: ^6.2.0
   flutter_animate: ^4.5.0
   flex_color_scheme: ^8.4.0
-  circle_nav_bar: ^2.2.0
 
   # Security
   flutter_secure_storage: ^9.0.0
