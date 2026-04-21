@@ -41,12 +41,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           children: [
             // Top bar: "Add" text right-aligned
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 8, 12, 0),
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TextButton(
-                    onPressed: () => _openAddSheet(),
+                  GestureDetector(
+                    onTap: () => _openAddSheet(),
                     child: const Text('Add', style: TextStyle(color: Color(0xFF4A9EFF), fontSize: 17)),
                   ),
                 ],
@@ -105,21 +105,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                     ),
 
-                  const SizedBox(height: 12),
-
-                  // + Add Server row
-                  Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF1C1C1E),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: ListTile(
-                      leading: const Icon(Icons.add, color: Color(0xFF4A9EFF), size: 20),
-                      title: const Text('Add Server', style: TextStyle(color: Color(0xFF4A9EFF), fontSize: 16)),
-                      onTap: () => _openAddSheet(),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    ),
-                  ),
                 ],
               ),
             ),

@@ -7,6 +7,6 @@ void main() {
     await tester.pumpWidget(const ProviderScope(child: SSHClientApp()));
     await tester.pump(const Duration(seconds: 1));
     expect(find.text('Servers'), findsAtLeast(1));
-    expect(find.text('Add Server'), findsOneWidget);
+    expect(find.text('Add'), findsOneWidget);
   });
 }
