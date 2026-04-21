@@ -37,18 +37,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.terminal_rounded, color: cs.primary, size: 22),
-            const SizedBox(width: 8),
-            const Text('SSH Client'),
-          ],
-        ),
+        title: null,
+        toolbarHeight: 48,
         actions: [
-          IconButton(icon: const Icon(Icons.code_rounded), tooltip: 'Snippets', onPressed: () => Navigator.pushNamed(context, '/snippets')),
           IconButton(icon: Icon(Icons.flash_on_rounded, color: cs.tertiary), tooltip: 'Quick Connect', onPressed: () => _showQuickConnect(context)),
-          IconButton(icon: const Icon(Icons.settings_rounded), onPressed: () => Navigator.pushNamed(context, '/settings')),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
