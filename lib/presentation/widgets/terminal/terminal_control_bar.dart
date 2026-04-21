@@ -42,6 +42,7 @@ class _TerminalControlBarState extends State<TerminalControlBar> {
             _toggle('Alt', _altActive, () => setState(() => _altActive = !_altActive)),
             _key('Esc', '\x1b'),
             _key('Tab', '\t'),
+            _key('BS', '\x7f'),
             _key('↑', '\x1b[A'),
             _key('↓', '\x1b[B'),
             _key('→', '\x1b[C'),

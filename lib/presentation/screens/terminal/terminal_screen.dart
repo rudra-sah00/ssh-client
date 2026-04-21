@@ -149,7 +149,7 @@ class _TerminalScreenState extends ConsumerState<TerminalScreen> with WidgetsBin
     final settings = ref.watch(settingsProvider);
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Theme.of(context).brightness == Brightness.dark ? Colors.black : const Color(0xFFF2F2F7),
       appBar: AppBar(
         backgroundColor: cs.surface,
         title: Row(
@@ -244,14 +244,19 @@ class _TerminalScreenState extends ConsumerState<TerminalScreen> with WidgetsBin
       );
     }
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Column(children: [
       Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-        color: Colors.white.withValues(alpha: 0.05),
+        color: isDark ? Colors.white.withValues(alpha: 0.05) : Colors.black.withValues(alpha: 0.05),
         child: Text(
           '${_session!.connection.username}@${_session!.connection.host}:${_session!.connection.port}',
-          style: GoogleFonts.jetBrainsMono(color: Colors.white38, fontSize: 11),
+          style: GoogleFonts.jetBrainsMono(
+            color: isDark ? Colors.white38 : Colors.black38,
+            fontSize: 11,
+          ),
         ),
       ),
       Expanded(
@@ -261,6 +266,57 @@ class _TerminalScreenState extends ConsumerState<TerminalScreen> with WidgetsBin
             fontSize: settings.terminalFontSize,
             fontFamily: GoogleFonts.jetBrainsMono().fontFamily!,
           ),
+          theme: isDark
+              ? const TerminalTheme(
+                  cursor: Color(0xFFE0E0E0),
+                  selection: Color(0x80FFFFFF),
+                  foreground: Color(0xFFE0E0E0),
+                  background: Color(0xFF000000),
+                  black: Color(0xFF000000),
+                  white: Color(0xFFE0E0E0),
+                  red: Color(0xFFFF6B6B),
+                  green: Color(0xFF69DB7C),
+                  yellow: Color(0xFFFCC419),
+                  blue: Color(0xFF74C0FC),
+                  magenta: Color(0xFFDA77F2),
+                  cyan: Color(0xFF66D9E8),
+                  brightBlack: Color(0xFF868E96),
+                  brightRed: Color(0xFFFF8787),
+                  brightGreen: Color(0xFF8CE99A),
+                  brightYellow: Color(0xFFFFD43B),
+                  brightBlue: Color(0xFFA5D8FF),
+                  brightMagenta: Color(0xFFE599F7),
+                  brightCyan: Color(0xFF99E9F2),
+                  brightWhite: Color(0xFFFFFFFF),
+                  searchHitBackground: Color(0xFFFFD43B),
+                  searchHitBackgroundCurrent: Color(0xFFFFA94D),
+                  searchHitForeground: Color(0xFF000000),
+                )
+              : const TerminalTheme(
+                  cursor: Color(0xFF333333),
+                  selection: Color(0x40000000),
+                  foreground: Color(0xFF1E1E1E),
+                  background: Color(0xFFF2F2F7),
+                  black: Color(0xFF1E1E1E),
+                  white: Color(0xFFF2F2F7),
+                  red: Color(0xFFC92A2A),
+                  green: Color(0xFF2B8A3E),
+                  yellow: Color(0xFFE67700),
+                  blue: Color(0xFF1864AB),
+                  magenta: Color(0xFF862E9C),
+                  cyan: Color(0xFF0B7285),
+                  brightBlack: Color(0xFF868E96),
+                  brightRed: Color(0xFFE03131),
+                  brightGreen: Color(0xFF37B24D),
+                  brightYellow: Color(0xFFF59F00),
+                  brightBlue: Color(0xFF1C7ED6),
+                  brightMagenta: Color(0xFF9C36B5),
+                  brightCyan: Color(0xFF1098AD),
+                  brightWhite: Color(0xFF000000),
+                  searchHitBackground: Color(0xFFFFD43B),
+                  searchHitBackgroundCurrent: Color(0xFFFFA94D),
+                  searchHitForeground: Color(0xFF000000),
+                ),
           autofocus: true,
         ),
       ),
