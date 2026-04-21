@@ -44,11 +44,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           IconButton(icon: Icon(Icons.flash_on_rounded, color: cs.tertiary), tooltip: 'Quick Connect', onPressed: () => _showQuickConnect(context)),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: IconButton(
         onPressed: () => _showAddConnection(context),
-        icon: const Icon(Icons.add_rounded),
-        label: const Text('New'),
-      ).animate().scale(delay: 300.ms, duration: 300.ms, curve: Curves.easeOutBack),
+        icon: const Icon(Icons.add, size: 28),
+      ),
       body: Column(
         children: [
           // Active sessions banner

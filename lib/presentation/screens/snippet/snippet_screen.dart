@@ -17,10 +17,9 @@ class SnippetScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Snippets')),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: IconButton(
         onPressed: () => _showEditor(context, ref, null),
-        icon: const Icon(Icons.add),
-        label: const Text('New Snippet'),
+        icon: const Icon(Icons.add, size: 28),
       ),
       body: snippets.isEmpty
           ? Center(
