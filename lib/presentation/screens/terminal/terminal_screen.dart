@@ -318,6 +318,7 @@ class _TerminalScreenState extends ConsumerState<TerminalScreen> with WidgetsBin
                   searchHitForeground: Color(0xFF000000),
                 ),
           autofocus: true,
+          deleteDetection: true,
         ),
       ),
       TerminalControlBar(
