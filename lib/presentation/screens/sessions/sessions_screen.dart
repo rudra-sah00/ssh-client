@@ -12,68 +12,68 @@ class SessionsScreen extends ConsumerWidget {
     final cs = Theme.of(context).colorScheme;
 
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
-              child: Text('Sessions', style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold, color: cs.onSurface)),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            pinned: true,
+            expandedHeight: 100,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            surfaceTintColor: Colors.transparent,
+            flexibleSpace: FlexibleSpaceBar(
+              titlePadding: const EdgeInsets.only(left: 20, bottom: 14),
+              title: Text('Sessions', style: TextStyle(fontWeight: FontWeight.bold, color: cs.onSurface)),
             ),
-            Expanded(
-              child: sessions.isEmpty
-                  ? Center(
-                      child: Text('No active sessions', style: TextStyle(color: cs.onSurface.withValues(alpha: 0.3), fontSize: 17)),
-                    )
-                  : ListView(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).cardTheme.color,
-                            borderRadius: BorderRadius.circular(12),
+          ),
+          if (sessions.isEmpty)
+            SliverFillRemaining(
+              child: Center(
+                child: Text('No active sessions', style: TextStyle(color: cs.onSurface.withValues(alpha: 0.3), fontSize: 17)),
+              ),
+            )
+          else
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardTheme.color,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(
+                    children: [
+                      for (int i = 0; i < sessions.length; i++) ...[
+                        ListTile(
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                          title: Text(
+                            sessions[i].connection.name,
+                            style: TextStyle(color: cs.onSurface, fontSize: 16, fontWeight: FontWeight.w500),
                           ),
-                          child: Column(
-                            children: [
-                              for (int i = 0; i < sessions.length; i++) ...[
-                                ListTile(
-                                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                                  title: Text(
-                                    sessions[i].connection.name,
-                                    style: TextStyle(color: cs.onSurface, fontSize: 16, fontWeight: FontWeight.w500),
-                                  ),
-                                  subtitle: Text(
-                                    '${sessions[i].connection.username}@${sessions[i].connection.host}:${sessions[i].connection.port}',
-                                    style: TextStyle(color: cs.onSurface.withValues(alpha: 0.38), fontSize: 13),
-                                  ),
-                                  leading: Container(
-                                    width: 8, height: 8,
-                                    decoration: BoxDecoration(
-                                      color: sessions[i].isConnected ? const Color(0xFF4A9EFF) : Colors.red,
-                                      shape: BoxShape.circle,
-                                    ),
-                                  ),
-                                  trailing: GestureDetector(
-                                    onTap: () async {
-                                      await mgr.closeSession(sessions[i].id);
-                                      (context as Element).markNeedsBuild();
-                                    },
-                                    child: Text('Disconnect', style: TextStyle(color: Colors.red.shade400, fontSize: 14)),
-                                  ),
-                                  onTap: () => Navigator.pushNamed(context, '/terminal', arguments: sessions[i].connection),
-                                ),
-                                if (i < sessions.length - 1)
-                                  Divider(height: 1, indent: 16, endIndent: 16, color: cs.onSurface.withValues(alpha: 0.08)),
-                              ],
-                            ],
+                          subtitle: Text(
+                            '${sessions[i].connection.username}@${sessions[i].connection.host}:${sessions[i].connection.port}',
+                            style: TextStyle(color: cs.onSurface.withValues(alpha: 0.38), fontSize: 13),
                           ),
+                          leading: Container(
+                            width: 8, height: 8,
+                            decoration: BoxDecoration(
+                              color: sessions[i].isConnected ? const Color(0xFF4A9EFF) : Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          trailing: GestureDetector(
+                            onTap: () => mgr.closeSession(sessions[i].id),
+                            child: Text('Disconnect', style: TextStyle(color: Colors.red.shade400, fontSize: 14)),
+                          ),
+                          onTap: () => Navigator.pushNamed(context, '/terminal', arguments: sessions[i].connection),
                         ),
+                        if (i < sessions.length - 1)
+                          Divider(height: 1, indent: 16, endIndent: 16, color: cs.onSurface.withValues(alpha: 0.08)),
                       ],
-                    ),
+                    ],
+                  ),
+                ),
+              ),
             ),
-          ],
-        ),
+        ],
       ),
     );
   }

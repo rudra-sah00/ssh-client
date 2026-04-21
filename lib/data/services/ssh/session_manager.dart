@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:xterm/xterm.dart';
 import 'package:ssh_client/data/models/connection/connection_model.dart';
 import 'package:ssh_client/data/services/ssh/ssh_service_impl.dart';
@@ -45,7 +46,7 @@ class SshSession {
   }
 }
 
-class SessionManager {
+class SessionManager extends ChangeNotifier {
   final Map<String, SshSession> _sessions = {};
 
   Map<String, SshSession> get sessions => Map.unmodifiable(_sessions);
@@ -64,17 +65,14 @@ class SessionManager {
 
     await sshService.connect(connection);
 
-    // Bind SSH output to terminal
     sshService.output.listen((data) {
       terminal.write(String.fromCharCodes(data));
     });
 
-    // Bind terminal input to SSH
     terminal.onOutput = (data) {
       sshService.write(Uint8List.fromList(data.codeUnits));
     };
 
-    // Bind terminal resize to SSH
     terminal.onResize = (w, h, pw, ph) {
       sshService.resizeTerminal(w, h);
     };
@@ -88,6 +86,7 @@ class SessionManager {
 
     if (keepAlive) session.startKeepAlive(keepAliveInterval);
     _sessions[id] = session;
+    notifyListeners();
     return session;
   }
 
@@ -96,6 +95,7 @@ class SessionManager {
   Future<void> closeSession(String id) async {
     final session = _sessions.remove(id);
     session?.dispose();
+    notifyListeners();
   }
 
   Future<void> closeAll() async {
@@ -103,5 +103,6 @@ class SessionManager {
       session.dispose();
     }
     _sessions.clear();
+    notifyListeners();
   }
 }

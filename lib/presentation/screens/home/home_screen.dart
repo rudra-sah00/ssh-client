@@ -38,29 +38,32 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
 
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Title + Add
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text('Servers', style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold, color: cs.onSurface)),
-                  GestureDetector(
-                    onTap: () => _openAdd(),
-                    child: const Text('Add', style: TextStyle(color: Color(0xFF4A9EFF), fontSize: 17)),
-                  ),
-                ],
-              ),
-            ),
-
-            // Search
-            if (connections.length > 3)
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            pinned: true,
+            expandedHeight: 100,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            surfaceTintColor: Colors.transparent,
+            actions: [
               Padding(
+                padding: const EdgeInsets.only(right: 12),
+                child: GestureDetector(
+                  onTap: () => _openAdd(),
+                  child: const Text('Add', style: TextStyle(color: Color(0xFF4A9EFF), fontSize: 17)),
+                ),
+              ),
+            ],
+            flexibleSpace: FlexibleSpaceBar(
+              titlePadding: const EdgeInsets.only(left: 20, bottom: 14),
+              title: Text('Servers', style: TextStyle(fontWeight: FontWeight.bold, color: cs.onSurface)),
+            ),
+          ),
+
+          // Search
+          if (connections.length > 3)
+            SliverToBoxAdapter(
+              child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
                 child: TextField(
                   decoration: InputDecoration(
@@ -76,44 +79,45 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   onChanged: (v) => setState(() => _search = v),
                 ),
               ),
-
-            // Content
-            Expanded(
-              child: filtered.isEmpty
-                  ? Center(
-                      child: Text(
-                        connections.isEmpty ? 'No servers' : 'No results',
-                        style: TextStyle(color: cs.onSurface.withValues(alpha: 0.3), fontSize: 17),
-                      ),
-                    )
-                  : ListView(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).cardTheme.color,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Column(
-                            children: [
-                              for (int i = 0; i < filtered.length; i++) ...[
-                                _ServerRow(
-                                  connection: filtered[i],
-                                  hasActive: mgr.activeSessions.any((s) => s.connection.id == filtered[i].id),
-                                  onEdit: () => _openAdd(filtered[i]),
-                                  onDelete: () => _confirmDelete(filtered[i]),
-                                ),
-                                if (i < filtered.length - 1)
-                                  Divider(height: 1, indent: 16, endIndent: 16, color: cs.onSurface.withValues(alpha: 0.08)),
-                              ],
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
             ),
-          ],
-        ),
+
+          // Content
+          if (filtered.isEmpty)
+            SliverFillRemaining(
+              child: Center(
+                child: Text(
+                  connections.isEmpty ? 'No servers' : 'No results',
+                  style: TextStyle(color: cs.onSurface.withValues(alpha: 0.3), fontSize: 17),
+                ),
+              ),
+            )
+          else
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardTheme.color,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(
+                    children: [
+                      for (int i = 0; i < filtered.length; i++) ...[
+                        _ServerRow(
+                          connection: filtered[i],
+                          hasActive: mgr.activeSessions.any((s) => s.connection.id == filtered[i].id),
+                          onEdit: () => _openAdd(filtered[i]),
+                          onDelete: () => _confirmDelete(filtered[i]),
+                        ),
+                        if (i < filtered.length - 1)
+                          Divider(height: 1, indent: 16, endIndent: 16, color: cs.onSurface.withValues(alpha: 0.08)),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

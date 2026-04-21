@@ -11,7 +11,7 @@ import 'package:ssh_client/data/services/storage/secure_storage_service_impl.dar
 final storageProvider = Provider((_) => SecureStorageServiceImpl());
 
 // Session Manager (global, survives navigation)
-final sessionManagerProvider = Provider((_) => SessionManager());
+final sessionManagerProvider = ChangeNotifierProvider<SessionManager>((_) => SessionManager());
 
 // Settings
 final settingsProvider =
