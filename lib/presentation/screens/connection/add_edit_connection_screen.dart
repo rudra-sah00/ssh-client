@@ -220,11 +220,9 @@ class _State extends ConsumerState<AddEditConnectionScreen> {
               // ── Save Button ──
               SizedBox(
                 width: double.infinity,
-                height: 52,
-                child: FilledButton.icon(
+                child: TextButton(
                   onPressed: _save,
-                  icon: Icon(_isEditing ? Icons.check_rounded : Icons.save_rounded),
-                  label: Text(_isEditing ? 'Update' : 'Save', style: textTheme.titleMedium?.copyWith(color: colors.onPrimary)),
+                  child: Text(_isEditing ? 'Update' : 'Save'),
                 ),
               ).animate().fadeIn(delay: 480.ms, duration: 300.ms).slideY(begin: 0.15),
 

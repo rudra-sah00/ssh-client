@@ -69,8 +69,8 @@ class _TerminalScreenState extends ConsumerState<TerminalScreen> {
         content: Text('Disconnect from ${_session?.connection.name ?? "session"}?'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
-          FilledButton(
-            style: FilledButton.styleFrom(backgroundColor: Colors.red),
+          TextButton(
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
             onPressed: () async {
               Navigator.pop(ctx);
               final name = _session?.connection.name ?? '';
@@ -202,10 +202,9 @@ class _TerminalScreenState extends ConsumerState<TerminalScreen> {
               const SizedBox(height: 10),
               Text(_error!, textAlign: TextAlign.center, style: GoogleFonts.jetBrainsMono(color: Colors.white54, fontSize: 12)),
               const SizedBox(height: 24),
-              FilledButton.icon(
-                icon: const Icon(Icons.refresh_rounded, size: 18),
+              TextButton(
                 onPressed: () { setState(() { _loading = true; _error = null; }); _connect(); },
-                label: const Text('Retry'),
+                child: const Text('Retry'),
               ),
             ]).animate().fadeIn(duration: 400.ms).slideY(begin: 0.1),
           ),

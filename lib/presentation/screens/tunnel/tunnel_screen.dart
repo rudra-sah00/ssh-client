@@ -157,7 +157,7 @@ class _TunnelScreenState extends ConsumerState<TunnelScreen> {
           ),
           actions: [
             TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
-            FilledButton(
+            TextButton(
               onPressed: () async {
                 Navigator.pop(ctx);
                 try {

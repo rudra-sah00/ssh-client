@@ -174,7 +174,7 @@ class _SftpBrowserScreenState extends State<SftpBrowserScreen> {
         const SizedBox(height: 16),
         Text(_error!, textAlign: TextAlign.center),
         const SizedBox(height: 16),
-        FilledButton(onPressed: _connect, child: const Text('Retry')),
+        TextButton(onPressed: _connect, child: const Text('Retry')),
       ])).animate().fadeIn(duration: 400.ms).slideY(begin: 0.1);
     }
 
@@ -291,8 +291,8 @@ class _SftpBrowserScreenState extends State<SftpBrowserScreen> {
         content: Text('Delete "$name"?'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancel')),
-          FilledButton(
-            style: FilledButton.styleFrom(backgroundColor: Colors.red),
+          TextButton(
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
             onPressed: () => Navigator.pop(ctx, true),
             child: const Text('Delete'),
           ),
@@ -318,7 +318,7 @@ class _SftpBrowserScreenState extends State<SftpBrowserScreen> {
         content: TextField(controller: controller, autofocus: true),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
-          FilledButton(onPressed: () => Navigator.pop(ctx, controller.text), child: const Text('Rename')),
+          TextButton(onPressed: () => Navigator.pop(ctx, controller.text), child: const Text('Rename')),
         ],
       ),
     );
@@ -341,7 +341,7 @@ class _SftpBrowserScreenState extends State<SftpBrowserScreen> {
         content: TextField(controller: controller, autofocus: true, decoration: const InputDecoration(hintText: 'Folder name')),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
-          FilledButton(onPressed: () => Navigator.pop(ctx, controller.text), child: const Text('Create')),
+          TextButton(onPressed: () => Navigator.pop(ctx, controller.text), child: const Text('Create')),
         ],
       ),
     );

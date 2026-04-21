@@ -186,45 +186,53 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
-      builder: (ctx) => Padding(
-        padding: EdgeInsets.fromLTRB(20, 20, 20, MediaQuery.of(ctx).viewInsets.bottom + 20),
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Row(children: [
-            Icon(Icons.flash_on_rounded, color: Theme.of(context).colorScheme.tertiary),
-            const SizedBox(width: 10),
-            Text('Quick Connect', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600)),
-          ]),
-          const SizedBox(height: 20),
-          TextField(controller: host, decoration: const InputDecoration(labelText: 'Host', prefixIcon: Icon(Icons.dns_rounded))),
-          const SizedBox(height: 12),
-          TextField(controller: port, decoration: const InputDecoration(labelText: 'Port', prefixIcon: Icon(Icons.numbers_rounded)), keyboardType: TextInputType.number),
-          const SizedBox(height: 12),
-          TextField(controller: user, decoration: const InputDecoration(labelText: 'Username', prefixIcon: Icon(Icons.person_rounded))),
-          const SizedBox(height: 12),
-          TextField(controller: pass, decoration: const InputDecoration(labelText: 'Password', prefixIcon: Icon(Icons.lock_rounded)), obscureText: true),
-          const SizedBox(height: 20),
-          SizedBox(
-            width: double.infinity,
-            height: 48,
-            child: FilledButton.icon(
-              icon: const Icon(Icons.flash_on_rounded, size: 18),
-              onPressed: () {
-                if (host.text.isEmpty || user.text.isEmpty) return;
-                Navigator.pop(ctx);
-                final conn = ConnectionModel(
-                  id: 'quick_${DateTime.now().millisecondsSinceEpoch}',
-                  name: '${user.text}@${host.text}',
-                  host: host.text.trim(),
-                  port: int.tryParse(port.text) ?? 22,
-                  username: user.text.trim(),
-                  password: pass.text,
-                );
-                Navigator.pushNamed(context, '/terminal', arguments: conn);
-              },
-              label: const Text('Connect'),
+      builder: (_) => DraggableScrollableSheet(
+        initialChildSize: 0.9,
+        minChildSize: 0.5,
+        maxChildSize: 0.95,
+        expand: false,
+        builder: (_, controller) => SingleChildScrollView(
+          controller: controller,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Center(
+              child: Container(
+                width: 40, height: 4,
+                margin: const EdgeInsets.only(bottom: 16),
+                decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(2)),
+              ),
             ),
-          ),
-        ]),
+            Text('Quick Connect', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600)),
+            const SizedBox(height: 24),
+            TextField(controller: host, decoration: const InputDecoration(labelText: 'Host', prefixIcon: Icon(Icons.dns_rounded))),
+            const SizedBox(height: 14),
+            TextField(controller: port, decoration: const InputDecoration(labelText: 'Port', prefixIcon: Icon(Icons.numbers_rounded)), keyboardType: TextInputType.number),
+            const SizedBox(height: 14),
+            TextField(controller: user, decoration: const InputDecoration(labelText: 'Username', prefixIcon: Icon(Icons.person_rounded))),
+            const SizedBox(height: 14),
+            TextField(controller: pass, decoration: const InputDecoration(labelText: 'Password', prefixIcon: Icon(Icons.lock_rounded)), obscureText: true),
+            const SizedBox(height: 28),
+            SizedBox(
+              width: double.infinity,
+              child: TextButton(
+                onPressed: () {
+                  if (host.text.isEmpty || user.text.isEmpty) return;
+                  Navigator.pop(context);
+                  final conn = ConnectionModel(
+                    id: 'quick_${DateTime.now().millisecondsSinceEpoch}',
+                    name: '${user.text}@${host.text}',
+                    host: host.text.trim(),
+                    port: int.tryParse(port.text) ?? 22,
+                    username: user.text.trim(),
+                    password: pass.text,
+                  );
+                  Navigator.pushNamed(context, '/terminal', arguments: conn);
+                },
+                child: const Text('Connect'),
+              ),
+            ),
+          ]),
+        ),
       ),
     );
   }
@@ -389,8 +397,8 @@ class _ConnectionTile extends ConsumerWidget {
         content: Text('Delete "${connection.name}"?\nThis cannot be undone.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
-          FilledButton(
-            style: FilledButton.styleFrom(backgroundColor: Colors.red),
+          TextButton(
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
             onPressed: () {
               Navigator.pop(ctx);
               ref.read(connectionListProvider.notifier).delete(connection.id);

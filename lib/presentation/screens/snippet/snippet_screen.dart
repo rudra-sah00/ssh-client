@@ -126,7 +126,7 @@ class SnippetScreen extends ConsumerWidget {
         ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
-          FilledButton(
+          TextButton(
             onPressed: () {
               if (name.text.isEmpty || command.text.isEmpty) return;
               final snippet = SnippetModel(

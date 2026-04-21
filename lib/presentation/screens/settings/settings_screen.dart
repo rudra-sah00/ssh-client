@@ -149,7 +149,7 @@ class SettingsScreen extends ConsumerWidget {
         ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
-          FilledButton(
+          TextButton(
             onPressed: () async {
               Navigator.pop(ctx);
               try {
