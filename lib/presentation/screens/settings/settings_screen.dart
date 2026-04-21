@@ -19,20 +19,6 @@ class SettingsScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         children: [
-          // — Appearance —
-          _SectionHeader(icon: Icons.palette_outlined, title: 'Appearance'),
-          _SectionCard(
-            children: [
-              SwitchListTile(
-                title: const Text('Dark Mode'),
-                subtitle: const Text('Toggle dark/light theme'),
-                secondary: Icon(Icons.dark_mode, color: colors.primary),
-                value: settings.darkMode,
-                onChanged: (v) => notifier.update(settings.copyWith(darkMode: v)),
-              ),
-            ],
-          ),
-
           // — Terminal —
           _SectionHeader(icon: Icons.terminal_outlined, title: 'Terminal'),
           _SectionCard(

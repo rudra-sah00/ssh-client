@@ -6,7 +6,6 @@ part 'settings_model.g.dart';
 @freezed
 class SettingsModel with _$SettingsModel {
   const factory SettingsModel({
-    @Default(true) bool darkMode,
     @Default(14.0) double terminalFontSize,
     @Default(true) bool keepAlive,
     @Default(30) int keepAliveInterval,

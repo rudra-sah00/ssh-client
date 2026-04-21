@@ -8,7 +8,6 @@ part of 'settings_model.dart';
 
 _$SettingsModelImpl _$$SettingsModelImplFromJson(Map<String, dynamic> json) =>
     _$SettingsModelImpl(
-      darkMode: json['darkMode'] as bool? ?? true,
       terminalFontSize: (json['terminalFontSize'] as num?)?.toDouble() ?? 14.0,
       keepAlive: json['keepAlive'] as bool? ?? true,
       keepAliveInterval: (json['keepAliveInterval'] as num?)?.toInt() ?? 30,
@@ -17,7 +16,6 @@ _$SettingsModelImpl _$$SettingsModelImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$SettingsModelImplToJson(_$SettingsModelImpl instance) =>
     <String, dynamic>{
-      'darkMode': instance.darkMode,
       'terminalFontSize': instance.terminalFontSize,
       'keepAlive': instance.keepAlive,
       'keepAliveInterval': instance.keepAliveInterval,

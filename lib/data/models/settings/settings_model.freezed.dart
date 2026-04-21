@@ -21,7 +21,6 @@ SettingsModel _$SettingsModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$SettingsModel {
-  bool get darkMode => throw _privateConstructorUsedError;
   double get terminalFontSize => throw _privateConstructorUsedError;
   bool get keepAlive => throw _privateConstructorUsedError;
   int get keepAliveInterval => throw _privateConstructorUsedError;
@@ -45,7 +44,6 @@ abstract class $SettingsModelCopyWith<$Res> {
   ) = _$SettingsModelCopyWithImpl<$Res, SettingsModel>;
   @useResult
   $Res call({
-    bool darkMode,
     double terminalFontSize,
     bool keepAlive,
     int keepAliveInterval,
@@ -68,7 +66,6 @@ class _$SettingsModelCopyWithImpl<$Res, $Val extends SettingsModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? darkMode = null,
     Object? terminalFontSize = null,
     Object? keepAlive = null,
     Object? keepAliveInterval = null,
@@ -76,10 +73,6 @@ class _$SettingsModelCopyWithImpl<$Res, $Val extends SettingsModel>
   }) {
     return _then(
       _value.copyWith(
-            darkMode: null == darkMode
-                ? _value.darkMode
-                : darkMode // ignore: cast_nullable_to_non_nullable
-                      as bool,
             terminalFontSize: null == terminalFontSize
                 ? _value.terminalFontSize
                 : terminalFontSize // ignore: cast_nullable_to_non_nullable
@@ -112,7 +105,6 @@ abstract class _$$SettingsModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    bool darkMode,
     double terminalFontSize,
     bool keepAlive,
     int keepAliveInterval,
@@ -134,7 +126,6 @@ class __$$SettingsModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? darkMode = null,
     Object? terminalFontSize = null,
     Object? keepAlive = null,
     Object? keepAliveInterval = null,
@@ -142,10 +133,6 @@ class __$$SettingsModelImplCopyWithImpl<$Res>
   }) {
     return _then(
       _$SettingsModelImpl(
-        darkMode: null == darkMode
-            ? _value.darkMode
-            : darkMode // ignore: cast_nullable_to_non_nullable
-                  as bool,
         terminalFontSize: null == terminalFontSize
             ? _value.terminalFontSize
             : terminalFontSize // ignore: cast_nullable_to_non_nullable
@@ -171,7 +158,6 @@ class __$$SettingsModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$SettingsModelImpl implements _SettingsModel {
   const _$SettingsModelImpl({
-    this.darkMode = true,
     this.terminalFontSize = 14.0,
     this.keepAlive = true,
     this.keepAliveInterval = 30,
@@ -181,9 +167,6 @@ class _$SettingsModelImpl implements _SettingsModel {
   factory _$SettingsModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$SettingsModelImplFromJson(json);
 
-  @override
-  @JsonKey()
-  final bool darkMode;
   @override
   @JsonKey()
   final double terminalFontSize;
@@ -199,7 +182,7 @@ class _$SettingsModelImpl implements _SettingsModel {
 
   @override
   String toString() {
-    return 'SettingsModel(darkMode: $darkMode, terminalFontSize: $terminalFontSize, keepAlive: $keepAlive, keepAliveInterval: $keepAliveInterval, connectionTimeout: $connectionTimeout)';
+    return 'SettingsModel(terminalFontSize: $terminalFontSize, keepAlive: $keepAlive, keepAliveInterval: $keepAliveInterval, connectionTimeout: $connectionTimeout)';
   }
 
   @override
@@ -207,8 +190,6 @@ class _$SettingsModelImpl implements _SettingsModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SettingsModelImpl &&
-            (identical(other.darkMode, darkMode) ||
-                other.darkMode == darkMode) &&
             (identical(other.terminalFontSize, terminalFontSize) ||
                 other.terminalFontSize == terminalFontSize) &&
             (identical(other.keepAlive, keepAlive) ||
@@ -223,7 +204,6 @@ class _$SettingsModelImpl implements _SettingsModel {
   @override
   int get hashCode => Object.hash(
     runtimeType,
-    darkMode,
     terminalFontSize,
     keepAlive,
     keepAliveInterval,
@@ -246,7 +226,6 @@ class _$SettingsModelImpl implements _SettingsModel {
 
 abstract class _SettingsModel implements SettingsModel {
   const factory _SettingsModel({
-    final bool darkMode,
     final double terminalFontSize,
     final bool keepAlive,
     final int keepAliveInterval,
@@ -256,8 +235,6 @@ abstract class _SettingsModel implements SettingsModel {
   factory _SettingsModel.fromJson(Map<String, dynamic> json) =
       _$SettingsModelImpl.fromJson;
 
-  @override
-  bool get darkMode;
   @override
   double get terminalFontSize;
   @override
