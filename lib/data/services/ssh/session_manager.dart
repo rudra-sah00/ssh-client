@@ -92,6 +92,43 @@ class SessionManager extends ChangeNotifier {
 
   SshSession? getSession(String id) => _sessions[id];
 
+  /// Reconnect with an existing Terminal instance (preserves scrollback)
+  Future<SshSession> reconnectSession(
+    ConnectionModel connection, {
+    required Terminal terminal,
+    int keepAliveInterval = 30,
+    bool keepAlive = true,
+  }) async {
+    final id = '${connection.id}_${DateTime.now().millisecondsSinceEpoch}';
+    final sshService = SshServiceImpl();
+
+    await sshService.connect(connection);
+
+    sshService.output.listen((data) {
+      terminal.write(String.fromCharCodes(data));
+    });
+
+    terminal.onOutput = (data) {
+      sshService.write(Uint8List.fromList(data.codeUnits));
+    };
+
+    terminal.onResize = (w, h, pw, ph) {
+      sshService.resizeTerminal(w, h);
+    };
+
+    final session = SshSession(
+      id: id,
+      connection: connection,
+      service: sshService,
+      terminal: terminal,
+    );
+
+    if (keepAlive) session.startKeepAlive(keepAliveInterval);
+    _sessions[id] = session;
+    notifyListeners();
+    return session;
+  }
+
   Future<void> closeSession(String id) async {
     final session = _sessions.remove(id);
     session?.dispose();

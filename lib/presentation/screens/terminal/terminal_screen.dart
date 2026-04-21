@@ -19,15 +19,70 @@ class TerminalScreen extends ConsumerStatefulWidget {
   ConsumerState<TerminalScreen> createState() => _TerminalScreenState();
 }
 
-class _TerminalScreenState extends ConsumerState<TerminalScreen> {
+class _TerminalScreenState extends ConsumerState<TerminalScreen> with WidgetsBindingObserver {
   SshSession? _session;
   bool _loading = true;
   String? _error;
+  bool _reconnecting = false;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _connect();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && _session != null && !_session!.isConnected) {
+      _autoReconnect();
+    }
+  }
+
+  Future<void> _autoReconnect() async {
+    if (_reconnecting) return;
+    _reconnecting = true;
+
+    final terminal = _session!.terminal;
+    final mgr = ref.read(sessionManagerProvider);
+    final settings = ref.read(settingsProvider);
+
+    // Write reconnect message to existing terminal
+    terminal.write('\r\n\x1b[33m[Connection lost — reconnecting...]\x1b[0m\r\n');
+
+    // Close dead session
+    await mgr.closeSession(_session!.id);
+
+    try {
+      // Create new session but reuse the same terminal
+      final session = await mgr.reconnectSession(
+        widget.connection,
+        terminal: terminal,
+        keepAlive: settings.keepAlive,
+        keepAliveInterval: settings.keepAliveInterval,
+      );
+
+      if (mounted) {
+        setState(() { _session = session; });
+        terminal.write('\x1b[32m[Reconnected]\x1b[0m\r\n');
+
+        // Try to reattach tmux if available
+        session.service.write(Uint8List.fromList(
+          'command -v tmux >/dev/null && tmux has-session 2>/dev/null && tmux attach || true\n'.codeUnits,
+        ));
+      }
+    } catch (e) {
+      if (mounted) {
+        terminal.write('\x1b[31m[Reconnect failed: $e]\x1b[0m\r\n');
+      }
+    }
+    _reconnecting = false;
   }
 
   Future<void> _connect() async {
@@ -56,9 +111,6 @@ class _TerminalScreenState extends ConsumerState<TerminalScreen> {
     } catch (e) {
       if (mounted) {
         setState(() { _error = e.toString(); _loading = false; });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed: $e'), backgroundColor: Colors.red),
-        );
       }
     }
   }
@@ -67,7 +119,6 @@ class _TerminalScreenState extends ConsumerState<TerminalScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        icon: const Icon(Icons.power_settings_new_rounded, color: Colors.red, size: 32),
         title: const Text('Disconnect'),
         content: Text('Disconnect from ${_session?.connection.name ?? "session"}?'),
         actions: [
@@ -76,15 +127,11 @@ class _TerminalScreenState extends ConsumerState<TerminalScreen> {
             style: TextButton.styleFrom(foregroundColor: Colors.red),
             onPressed: () async {
               Navigator.pop(ctx);
-              final name = _session?.connection.name ?? '';
               if (_session != null) await mgr.closeSession(_session!.id);
               if (mgr.activeSessions.isNotEmpty) {
                 setState(() => _session = mgr.activeSessions.last);
               } else {
                 if (context.mounted) Navigator.pop(context);
-              }
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Disconnected from $name')));
               }
             },
             child: const Text('Disconnect'),
@@ -121,7 +168,6 @@ class _TerminalScreenState extends ConsumerState<TerminalScreen> {
         ),
         titleTextStyle: GoogleFonts.jetBrainsMono(fontSize: 15, color: cs.onSurface),
         actions: [
-          // Session switcher
           if (allSessions.length > 1)
             PopupMenuButton<String>(
               icon: Badge(
@@ -172,9 +218,6 @@ class _TerminalScreenState extends ConsumerState<TerminalScreen> {
             const SizedBox(height: 20),
             Text('Connecting to ${widget.connection.host}...',
                 style: GoogleFonts.jetBrainsMono(color: Colors.white70, fontSize: 13)),
-            const SizedBox(height: 6),
-            Text('${widget.connection.username}@${widget.connection.host}:${widget.connection.port}',
-                style: GoogleFonts.jetBrainsMono(color: Colors.white38, fontSize: 12)),
           ]).animate().fadeIn(duration: 400.ms),
         ),
       );
@@ -187,31 +230,21 @@ class _TerminalScreenState extends ConsumerState<TerminalScreen> {
           child: Padding(
             padding: const EdgeInsets.all(32),
             child: Column(mainAxisSize: MainAxisSize.min, children: [
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.red.withValues(alpha: 0.15),
-                ),
-                child: const Icon(Icons.error_outline_rounded, size: 40, color: Colors.red),
-              ),
+              const Icon(Icons.error_outline_rounded, size: 40, color: Colors.red),
               const SizedBox(height: 20),
-              Text('Connection Failed', style: GoogleFonts.inter(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600)),
-              const SizedBox(height: 10),
               Text(_error!, textAlign: TextAlign.center, style: GoogleFonts.jetBrainsMono(color: Colors.white54, fontSize: 12)),
               const SizedBox(height: 24),
               TextButton(
                 onPressed: () { setState(() { _loading = true; _error = null; }); _connect(); },
                 child: const Text('Retry'),
               ),
-            ]).animate().fadeIn(duration: 400.ms).slideY(begin: 0.1),
+            ]),
           ),
         ),
       );
     }
 
     return Column(children: [
-      // Connection info bar
       Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
