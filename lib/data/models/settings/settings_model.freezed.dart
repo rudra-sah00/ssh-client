@@ -21,12 +21,12 @@ SettingsModel _$SettingsModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$SettingsModel {
-  String get themeMode =>
-      throw _privateConstructorUsedError; // 'system', 'light', 'dark'
+  String get themeMode => throw _privateConstructorUsedError;
   double get terminalFontSize => throw _privateConstructorUsedError;
   bool get keepAlive => throw _privateConstructorUsedError;
   int get keepAliveInterval => throw _privateConstructorUsedError;
   int get connectionTimeout => throw _privateConstructorUsedError;
+  int get maxSessionMinutes => throw _privateConstructorUsedError;
 
   /// Serializes this SettingsModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -51,6 +51,7 @@ abstract class $SettingsModelCopyWith<$Res> {
     bool keepAlive,
     int keepAliveInterval,
     int connectionTimeout,
+    int maxSessionMinutes,
   });
 }
 
@@ -74,6 +75,7 @@ class _$SettingsModelCopyWithImpl<$Res, $Val extends SettingsModel>
     Object? keepAlive = null,
     Object? keepAliveInterval = null,
     Object? connectionTimeout = null,
+    Object? maxSessionMinutes = null,
   }) {
     return _then(
       _value.copyWith(
@@ -97,6 +99,10 @@ class _$SettingsModelCopyWithImpl<$Res, $Val extends SettingsModel>
                 ? _value.connectionTimeout
                 : connectionTimeout // ignore: cast_nullable_to_non_nullable
                       as int,
+            maxSessionMinutes: null == maxSessionMinutes
+                ? _value.maxSessionMinutes
+                : maxSessionMinutes // ignore: cast_nullable_to_non_nullable
+                      as int,
           )
           as $Val,
     );
@@ -118,6 +124,7 @@ abstract class _$$SettingsModelImplCopyWith<$Res>
     bool keepAlive,
     int keepAliveInterval,
     int connectionTimeout,
+    int maxSessionMinutes,
   });
 }
 
@@ -140,6 +147,7 @@ class __$$SettingsModelImplCopyWithImpl<$Res>
     Object? keepAlive = null,
     Object? keepAliveInterval = null,
     Object? connectionTimeout = null,
+    Object? maxSessionMinutes = null,
   }) {
     return _then(
       _$SettingsModelImpl(
@@ -163,6 +171,10 @@ class __$$SettingsModelImplCopyWithImpl<$Res>
             ? _value.connectionTimeout
             : connectionTimeout // ignore: cast_nullable_to_non_nullable
                   as int,
+        maxSessionMinutes: null == maxSessionMinutes
+            ? _value.maxSessionMinutes
+            : maxSessionMinutes // ignore: cast_nullable_to_non_nullable
+                  as int,
       ),
     );
   }
@@ -177,6 +189,7 @@ class _$SettingsModelImpl implements _SettingsModel {
     this.keepAlive = true,
     this.keepAliveInterval = 30,
     this.connectionTimeout = 30,
+    this.maxSessionMinutes = 0,
   });
 
   factory _$SettingsModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -185,7 +198,6 @@ class _$SettingsModelImpl implements _SettingsModel {
   @override
   @JsonKey()
   final String themeMode;
-  // 'system', 'light', 'dark'
   @override
   @JsonKey()
   final double terminalFontSize;
@@ -198,10 +210,13 @@ class _$SettingsModelImpl implements _SettingsModel {
   @override
   @JsonKey()
   final int connectionTimeout;
+  @override
+  @JsonKey()
+  final int maxSessionMinutes;
 
   @override
   String toString() {
-    return 'SettingsModel(themeMode: $themeMode, terminalFontSize: $terminalFontSize, keepAlive: $keepAlive, keepAliveInterval: $keepAliveInterval, connectionTimeout: $connectionTimeout)';
+    return 'SettingsModel(themeMode: $themeMode, terminalFontSize: $terminalFontSize, keepAlive: $keepAlive, keepAliveInterval: $keepAliveInterval, connectionTimeout: $connectionTimeout, maxSessionMinutes: $maxSessionMinutes)';
   }
 
   @override
@@ -218,7 +233,9 @@ class _$SettingsModelImpl implements _SettingsModel {
             (identical(other.keepAliveInterval, keepAliveInterval) ||
                 other.keepAliveInterval == keepAliveInterval) &&
             (identical(other.connectionTimeout, connectionTimeout) ||
-                other.connectionTimeout == connectionTimeout));
+                other.connectionTimeout == connectionTimeout) &&
+            (identical(other.maxSessionMinutes, maxSessionMinutes) ||
+                other.maxSessionMinutes == maxSessionMinutes));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -230,6 +247,7 @@ class _$SettingsModelImpl implements _SettingsModel {
     keepAlive,
     keepAliveInterval,
     connectionTimeout,
+    maxSessionMinutes,
   );
 
   /// Create a copy of SettingsModel
@@ -253,13 +271,14 @@ abstract class _SettingsModel implements SettingsModel {
     final bool keepAlive,
     final int keepAliveInterval,
     final int connectionTimeout,
+    final int maxSessionMinutes,
   }) = _$SettingsModelImpl;
 
   factory _SettingsModel.fromJson(Map<String, dynamic> json) =
       _$SettingsModelImpl.fromJson;
 
   @override
-  String get themeMode; // 'system', 'light', 'dark'
+  String get themeMode;
   @override
   double get terminalFontSize;
   @override
@@ -268,6 +287,8 @@ abstract class _SettingsModel implements SettingsModel {
   int get keepAliveInterval;
   @override
   int get connectionTimeout;
+  @override
+  int get maxSessionMinutes;
 
   /// Create a copy of SettingsModel
   /// with the given fields replaced by the non-null parameter values.

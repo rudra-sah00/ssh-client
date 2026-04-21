@@ -13,6 +13,7 @@ _$SettingsModelImpl _$$SettingsModelImplFromJson(Map<String, dynamic> json) =>
       keepAlive: json['keepAlive'] as bool? ?? true,
       keepAliveInterval: (json['keepAliveInterval'] as num?)?.toInt() ?? 30,
       connectionTimeout: (json['connectionTimeout'] as num?)?.toInt() ?? 30,
+      maxSessionMinutes: (json['maxSessionMinutes'] as num?)?.toInt() ?? 0,
     );
 
 Map<String, dynamic> _$$SettingsModelImplToJson(_$SettingsModelImpl instance) =>
@@ -22,4 +23,5 @@ Map<String, dynamic> _$$SettingsModelImplToJson(_$SettingsModelImpl instance) =>
       'keepAlive': instance.keepAlive,
       'keepAliveInterval': instance.keepAliveInterval,
       'connectionTimeout': instance.connectionTimeout,
+      'maxSessionMinutes': instance.maxSessionMinutes,
     };

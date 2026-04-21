@@ -100,6 +100,19 @@ class SettingsScreen extends ConsumerWidget {
                 activeColor: _blue,
                 onChanged: (v) => notifier.update(settings.copyWith(connectionTimeout: v.round())),
               ),
+              const Divider(height: 16),
+              Text(
+                settings.maxSessionMinutes == 0
+                    ? 'Max session: Forever'
+                    : 'Max session: ${settings.maxSessionMinutes} min',
+                style: TextStyle(color: labelColor, fontSize: 13),
+              ),
+              Slider(
+                min: 0, max: 480, divisions: 16,
+                value: settings.maxSessionMinutes.toDouble(),
+                activeColor: _blue,
+                onChanged: (v) => notifier.update(settings.copyWith(maxSessionMinutes: v.round())),
+              ),
             ],
           ),
 

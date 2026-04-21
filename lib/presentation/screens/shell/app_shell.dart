@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ssh_client/presentation/screens/home/home_screen.dart';
+import 'package:ssh_client/presentation/screens/sessions/sessions_screen.dart';
 import 'package:ssh_client/presentation/screens/settings/settings_screen.dart';
 
 class AppShell extends StatefulWidget {
@@ -12,15 +13,17 @@ class AppShell extends StatefulWidget {
 class _AppShellState extends State<AppShell> {
   int _index = 0;
 
-  final _screens = const [
-    HomeScreen(),
-    SettingsScreen(),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_index],
+      body: IndexedStack(
+        index: _index,
+        children: const [
+          HomeScreen(),
+          SessionsScreen(),
+          SettingsScreen(),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _index,
         onTap: (i) => setState(() => _index = i),
@@ -36,6 +39,11 @@ class _AppShellState extends State<AppShell> {
             icon: Icon(Icons.dns_outlined),
             activeIcon: Icon(Icons.dns_rounded),
             label: 'Servers',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.terminal_outlined),
+            activeIcon: Icon(Icons.terminal_rounded),
+            label: 'Sessions',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings_outlined),
