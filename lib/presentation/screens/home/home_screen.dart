@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ssh_client/data/models/connection/connection_model.dart';
 import 'package:ssh_client/data/providers/providers.dart';
 import 'package:ssh_client/data/services/ssh/session_manager.dart';
+import 'package:ssh_client/presentation/screens/connection/add_edit_connection_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -44,7 +45,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => Navigator.pushNamed(context, '/add-connection'),
+        onPressed: () => _showAddConnection(context),
         icon: const Icon(Icons.add_rounded),
         label: const Text('New'),
       ).animate().scale(delay: 300.ms, duration: 300.ms, curve: Curves.easeOutBack),
@@ -157,48 +158,73 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
+  void _showAddConnection(BuildContext context, [ConnectionModel? existing]) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (_) => DraggableScrollableSheet(
+        initialChildSize: 0.9,
+        minChildSize: 0.5,
+        maxChildSize: 0.95,
+        expand: false,
+        builder: (_, controller) => AddEditConnectionScreen(
+          existing: existing,
+          scrollController: controller,
+        ),
+      ),
+    );
+  }
+
   void _showQuickConnect(BuildContext context) {
     final host = TextEditingController();
     final user = TextEditingController();
     final pass = TextEditingController();
     final port = TextEditingController(text: '22');
 
-    showDialog(
+    showModalBottomSheet(
       context: context,
-      builder: (ctx) => AlertDialog(
-        icon: Icon(Icons.flash_on_rounded, color: Theme.of(context).colorScheme.tertiary),
-        title: const Text('Quick Connect'),
-        content: SingleChildScrollView(
-          child: Column(mainAxisSize: MainAxisSize.min, children: [
-            TextField(controller: host, decoration: const InputDecoration(labelText: 'Host', prefixIcon: Icon(Icons.dns_rounded))),
-            const SizedBox(height: 12),
-            TextField(controller: port, decoration: const InputDecoration(labelText: 'Port', prefixIcon: Icon(Icons.numbers_rounded)), keyboardType: TextInputType.number),
-            const SizedBox(height: 12),
-            TextField(controller: user, decoration: const InputDecoration(labelText: 'Username', prefixIcon: Icon(Icons.person_rounded))),
-            const SizedBox(height: 12),
-            TextField(controller: pass, decoration: const InputDecoration(labelText: 'Password', prefixIcon: Icon(Icons.lock_rounded)), obscureText: true),
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (ctx) => Padding(
+        padding: EdgeInsets.fromLTRB(20, 20, 20, MediaQuery.of(ctx).viewInsets.bottom + 20),
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Row(children: [
+            Icon(Icons.flash_on_rounded, color: Theme.of(context).colorScheme.tertiary),
+            const SizedBox(width: 10),
+            Text('Quick Connect', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600)),
           ]),
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
-          FilledButton.icon(
-            icon: const Icon(Icons.flash_on_rounded, size: 18),
-            onPressed: () {
-              if (host.text.isEmpty || user.text.isEmpty) return;
-              Navigator.pop(ctx);
-              final conn = ConnectionModel(
-                id: 'quick_${DateTime.now().millisecondsSinceEpoch}',
-                name: '${user.text}@${host.text}',
-                host: host.text.trim(),
-                port: int.tryParse(port.text) ?? 22,
-                username: user.text.trim(),
-                password: pass.text,
-              );
-              Navigator.pushNamed(context, '/terminal', arguments: conn);
-            },
-            label: const Text('Connect'),
+          const SizedBox(height: 20),
+          TextField(controller: host, decoration: const InputDecoration(labelText: 'Host', prefixIcon: Icon(Icons.dns_rounded))),
+          const SizedBox(height: 12),
+          TextField(controller: port, decoration: const InputDecoration(labelText: 'Port', prefixIcon: Icon(Icons.numbers_rounded)), keyboardType: TextInputType.number),
+          const SizedBox(height: 12),
+          TextField(controller: user, decoration: const InputDecoration(labelText: 'Username', prefixIcon: Icon(Icons.person_rounded))),
+          const SizedBox(height: 12),
+          TextField(controller: pass, decoration: const InputDecoration(labelText: 'Password', prefixIcon: Icon(Icons.lock_rounded)), obscureText: true),
+          const SizedBox(height: 20),
+          SizedBox(
+            width: double.infinity,
+            height: 48,
+            child: FilledButton.icon(
+              icon: const Icon(Icons.flash_on_rounded, size: 18),
+              onPressed: () {
+                if (host.text.isEmpty || user.text.isEmpty) return;
+                Navigator.pop(ctx);
+                final conn = ConnectionModel(
+                  id: 'quick_${DateTime.now().millisecondsSinceEpoch}',
+                  name: '${user.text}@${host.text}',
+                  host: host.text.trim(),
+                  port: int.tryParse(port.text) ?? 22,
+                  username: user.text.trim(),
+                  password: pass.text,
+                );
+                Navigator.pushNamed(context, '/terminal', arguments: conn);
+              },
+              label: const Text('Connect'),
+            ),
           ),
-        ],
+        ]),
       ),
     );
   }
@@ -334,7 +360,21 @@ class _ConnectionTile extends ConsumerWidget {
         ref.read(connectionListProvider.notifier).add(dup);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Duplicated "${connection.name}"')));
       case 'edit':
-        Navigator.pushNamed(context, '/add-connection', arguments: connection);
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          useSafeArea: true,
+          builder: (_) => DraggableScrollableSheet(
+            initialChildSize: 0.9,
+            minChildSize: 0.5,
+            maxChildSize: 0.95,
+            expand: false,
+            builder: (_, controller) => AddEditConnectionScreen(
+              existing: connection,
+              scrollController: controller,
+            ),
+          ),
+        );
       case 'delete':
         _confirmDelete(context, ref);
     }

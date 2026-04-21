@@ -6,7 +6,8 @@ import 'package:ssh_client/data/providers/providers.dart';
 
 class AddEditConnectionScreen extends ConsumerStatefulWidget {
   final ConnectionModel? existing;
-  const AddEditConnectionScreen({super.key, this.existing});
+  final ScrollController? scrollController;
+  const AddEditConnectionScreen({super.key, this.existing, this.scrollController});
 
   @override
   ConsumerState<AddEditConnectionScreen> createState() => _State();
@@ -74,25 +75,31 @@ class _State extends ConsumerState<AddEditConnectionScreen> {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+    final isSheet = widget.scrollController != null;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
+    final content = SingleChildScrollView(
+      controller: widget.scrollController,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(_isEditing ? Icons.edit_rounded : Icons.add_link_rounded, size: 22),
-            const SizedBox(width: 10),
-            Text(_isEditing ? 'Edit Connection' : 'New Connection'),
-          ],
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            if (isSheet) ...[
+              Center(
+                child: Container(
+                  width: 40, height: 4,
+                  margin: const EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(color: colors.onSurfaceVariant.withValues(alpha: 0.3), borderRadius: BorderRadius.circular(2)),
+                ),
+              ),
+              Row(children: [
+                Icon(_isEditing ? Icons.edit_rounded : Icons.add_link_rounded, size: 22, color: colors.primary),
+                const SizedBox(width: 10),
+                Text(_isEditing ? 'Edit Connection' : 'New Connection', style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600)),
+              ]),
+              const SizedBox(height: 20),
+            ],
               // ── Server Section ──
               _SectionHeader(icon: Icons.dns_rounded, label: 'Server', color: colors.primary)
                   .animate().fadeIn(duration: 300.ms).slideY(begin: 0.15),
@@ -225,7 +232,18 @@ class _State extends ConsumerState<AddEditConnectionScreen> {
             ],
           ),
         ),
+      );
+
+    if (isSheet) return content;
+    return Scaffold(
+      appBar: AppBar(
+        title: Row(mainAxisSize: MainAxisSize.min, children: [
+          Icon(_isEditing ? Icons.edit_rounded : Icons.add_link_rounded, size: 22),
+          const SizedBox(width: 10),
+          Text(_isEditing ? 'Edit Connection' : 'New Connection'),
+        ]),
       ),
+      body: content,
     );
   }
 
