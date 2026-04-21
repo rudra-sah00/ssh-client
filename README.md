@@ -60,4 +60,12 @@ flutter run
 
 ## Platforms
 
-iOS · Android · macOS · Web
+iOS · Android
+
+## CI/CD
+
+Every push to `main` triggers a GitHub Actions workflow that:
+1. Builds a release APK
+2. Creates a GitHub Release tagged with the version from `pubspec.yaml`
+3. Attaches the APK to the release
+4. Auto-generates release notes from commit messages

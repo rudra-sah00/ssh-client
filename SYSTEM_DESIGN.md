@@ -2,7 +2,7 @@
 
 ## 1. Overview
 
-A production-ready Flutter SSH client with interactive terminal, SFTP browser, SSH tunneling, multi-session management, and secure credential storage. Pure client-side — no auth, no backend required. Targets iOS, Android, macOS, and web.
+A production-ready Flutter SSH client with interactive terminal, SFTP browser, SSH tunneling, multi-session management, and secure credential storage. Pure client-side — no auth, no backend required. Targets iOS and Android.
 
 ## 2. Architecture
 
