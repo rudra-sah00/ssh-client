@@ -14,9 +14,12 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   String _search = '';
 
-  void _openAddSheet([ConnectionModel? existing]) {
-    Navigator.push(context, MaterialPageRoute(
-      builder: (_) => AddEditConnectionScreen(existing: existing),
+  void _openAdd([ConnectionModel? existing]) {
+    Navigator.push(context, PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => AddEditConnectionScreen(existing: existing),
+      transitionsBuilder: (context, anim, secondaryAnimation, child) =>
+          SlideTransition(position: Tween(begin: const Offset(1, 0), end: Offset.zero).animate(CurvedAnimation(parent: anim, curve: Curves.easeInOut)), child: child),
+      transitionDuration: const Duration(milliseconds: 300),
     ));
   }
 
@@ -24,6 +27,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final connections = ref.watch(connectionListProvider);
     final mgr = ref.watch(sessionManagerProvider);
+    final cs = Theme.of(context).colorScheme;
 
     var filtered = connections;
     if (_search.isNotEmpty) {
@@ -34,117 +38,142 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
 
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Top bar: "Add" text right-aligned
+            // Top bar
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   GestureDetector(
-                    onTap: () => _openAddSheet(),
+                    onTap: () => _openAdd(),
                     child: const Text('Add', style: TextStyle(color: Color(0xFF4A9EFF), fontSize: 17)),
                   ),
                 ],
               ),
             ),
 
-            // Big title
+            // Title
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
-              child: Text('Servers', style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface)),
+              child: Text('Servers', style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold, color: cs.onSurface)),
             ),
 
-            // Search (only when many connections)
+            // Search
             if (connections.length > 3)
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
                 child: TextField(
                   decoration: InputDecoration(
                     hintText: 'Search...',
-                    hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.3)),
-                    prefixIcon: Icon(Icons.search, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.3)),
+                    hintStyle: TextStyle(color: cs.onSurface.withValues(alpha: 0.3)),
+                    prefixIcon: Icon(Icons.search, color: cs.onSurface.withValues(alpha: 0.3)),
                     filled: true,
                     fillColor: Theme.of(context).cardTheme.color,
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
                     contentPadding: const EdgeInsets.symmetric(vertical: 0),
                   ),
-                  style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                  style: TextStyle(color: cs.onSurface),
                   onChanged: (v) => setState(() => _search = v),
                 ),
               ),
 
-            // Server list
+            // Content
             Expanded(
-              child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                children: [
-                  // Connection cards
-                  if (filtered.isNotEmpty)
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardTheme.color,
-                        borderRadius: BorderRadius.circular(12),
+              child: filtered.isEmpty
+                  ? Center(
+                      child: Text(
+                        connections.isEmpty ? 'No servers' : 'No results',
+                        style: TextStyle(color: cs.onSurface.withValues(alpha: 0.3), fontSize: 17),
                       ),
-                      child: Column(
-                        children: [
-                          for (int i = 0; i < filtered.length; i++) ...[
-                            _ServerRow(
-                              connection: filtered[i],
-                              hasActive: mgr.activeSessions.any((s) => s.connection.id == filtered[i].id),
-                              onEdit: () => _openAddSheet(filtered[i]),
-                            ),
-                            if (i < filtered.length - 1)
-                              Divider(height: 1, indent: 16, endIndent: 16, color: Theme.of(context).dividerColor.withValues(alpha: 0.1)),
-                          ],
-                        ],
-                      ),
+                    )
+                  : ListView(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).cardTheme.color,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            children: [
+                              for (int i = 0; i < filtered.length; i++) ...[
+                                _ServerRow(
+                                  connection: filtered[i],
+                                  hasActive: mgr.activeSessions.any((s) => s.connection.id == filtered[i].id),
+                                  onEdit: () => _openAdd(filtered[i]),
+                                  onDelete: () => _confirmDelete(filtered[i]),
+                                ),
+                                if (i < filtered.length - 1)
+                                  Divider(height: 1, indent: 16, endIndent: 16, color: cs.onSurface.withValues(alpha: 0.08)),
+                              ],
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-
-                ],
-              ),
             ),
           ],
         ),
       ),
     );
   }
+
+  void _confirmDelete(ConnectionModel conn) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Delete Connection'),
+        content: Text('Delete "${conn.name}"?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
+          TextButton(
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            onPressed: () {
+              Navigator.pop(ctx);
+              ref.read(connectionListProvider.notifier).delete(conn.id);
+            },
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
-class _ServerRow extends ConsumerWidget {
+class _ServerRow extends StatelessWidget {
   final ConnectionModel connection;
   final bool hasActive;
   final VoidCallback onEdit;
-  const _ServerRow({required this.connection, required this.hasActive, required this.onEdit});
+  final VoidCallback onDelete;
+  const _ServerRow({required this.connection, required this.hasActive, required this.onEdit, required this.onDelete});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       title: Text(
         '${connection.host}:${connection.port}',
-        style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 16, fontWeight: FontWeight.w500),
+        style: TextStyle(color: cs.onSurface, fontSize: 16, fontWeight: FontWeight.w500),
       ),
       subtitle: Text(
         'ssh ${connection.username}@${connection.host} -p ${connection.port}',
-        style: const TextStyle(color: Colors.white38, fontSize: 13),
+        style: TextStyle(color: cs.onSurface.withValues(alpha: 0.38), fontSize: 13),
       ),
       trailing: hasActive
-          ? Container(
-              width: 8, height: 8,
-              decoration: const BoxDecoration(color: Colors.white70, shape: BoxShape.circle),
-            )
+          ? Container(width: 8, height: 8, decoration: BoxDecoration(color: cs.onSurface.withValues(alpha: 0.5), shape: BoxShape.circle))
           : null,
       onTap: () => Navigator.pushNamed(context, '/terminal', arguments: connection),
-      onLongPress: () => _showActions(context, ref),
+      onLongPress: () => _showOptions(context),
     );
   }
 
-  void _showActions(BuildContext context, WidgetRef ref) {
+  void _showOptions(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     showModalBottomSheet(
       context: context,
       builder: (ctx) => SafeArea(
@@ -153,70 +182,22 @@ class _ServerRow extends ConsumerWidget {
           children: [
             Container(
               width: 40, height: 4,
-              margin: const EdgeInsets.only(top: 12, bottom: 16),
-              decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(2)),
+              margin: const EdgeInsets.only(top: 12, bottom: 20),
+              decoration: BoxDecoration(color: isDark ? Colors.white24 : Colors.black12, borderRadius: BorderRadius.circular(2)),
             ),
-            Text(connection.name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
-            const SizedBox(height: 4),
-            Text('${connection.username}@${connection.host}', style: const TextStyle(color: Colors.white38, fontSize: 13)),
-            const SizedBox(height: 16),
-            _actionTile(ctx, 'Connect', Icons.terminal_rounded, () {
-              Navigator.pop(ctx);
-              Navigator.pushNamed(context, '/terminal', arguments: connection);
-            }),
-            _actionTile(ctx, 'SFTP Browser', Icons.folder_open_rounded, () {
-              Navigator.pop(ctx);
-              Navigator.pushNamed(context, '/sftp', arguments: connection);
-            }),
-            _actionTile(ctx, 'Tunnels', Icons.swap_horiz_rounded, () {
-              Navigator.pop(ctx);
-              Navigator.pushNamed(context, '/tunnel', arguments: connection);
-            }),
-            _actionTile(ctx, 'Duplicate', Icons.copy_rounded, () {
-              Navigator.pop(ctx);
-              final dup = connection.copyWith(id: DateTime.now().millisecondsSinceEpoch.toString(), name: '${connection.name} (copy)');
-              ref.read(connectionListProvider.notifier).add(dup);
-            }),
-            _actionTile(ctx, 'Edit', Icons.edit_rounded, () {
-              Navigator.pop(ctx);
-              onEdit();
-            }),
-            _actionTile(ctx, 'Delete', Icons.delete_outline_rounded, () {
-              Navigator.pop(ctx);
-              _confirmDelete(context, ref);
-            }, isDestructive: true),
-            const SizedBox(height: 16),
+            ListTile(
+              leading: const Icon(Icons.edit_rounded, size: 22),
+              title: const Text('Edit'),
+              onTap: () { Navigator.pop(ctx); onEdit(); },
+            ),
+            ListTile(
+              leading: const Icon(Icons.delete_outline_rounded, size: 22, color: Colors.red),
+              title: const Text('Delete', style: TextStyle(color: Colors.red)),
+              onTap: () { Navigator.pop(ctx); onDelete(); },
+            ),
+            const SizedBox(height: 12),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _actionTile(BuildContext ctx, String label, IconData icon, VoidCallback onTap, {bool isDestructive = false}) {
-    return ListTile(
-      leading: Icon(icon, color: isDestructive ? Colors.red : Colors.white70, size: 22),
-      title: Text(label, style: TextStyle(color: isDestructive ? Colors.red : Colors.white)),
-      onTap: onTap,
-    );
-  }
-
-  void _confirmDelete(BuildContext context, WidgetRef ref) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Delete Connection'),
-        content: Text('Delete "${connection.name}"?'),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
-          TextButton(
-            style: TextButton.styleFrom(foregroundColor: Colors.red),
-            onPressed: () {
-              Navigator.pop(ctx);
-              ref.read(connectionListProvider.notifier).delete(connection.id);
-            },
-            child: const Text('Delete'),
-          ),
-        ],
       ),
     );
   }

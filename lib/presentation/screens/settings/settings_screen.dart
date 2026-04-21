@@ -105,6 +105,25 @@ class SettingsScreen extends ConsumerWidget {
 
           const SizedBox(height: 12),
 
+          // ── Snippets ──
+          _Card(
+            color: cardColor,
+            children: [
+              _CardHeader(icon: Icons.code_outlined, title: 'Snippets'),
+              Text('Saved commands for quick access', style: TextStyle(color: labelColor, fontSize: 13)),
+              const SizedBox(height: 12),
+              GestureDetector(
+                onTap: () => Navigator.pushNamed(context, '/snippets'),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8),
+                  child: Text('Manage Snippets', style: TextStyle(color: _blue, fontSize: 16)),
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 12),
+
           // ── Data ──
           _Card(
             color: cardColor,

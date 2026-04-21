@@ -148,11 +148,6 @@ class _TerminalScreenState extends ConsumerState<TerminalScreen> {
                 ]),
               )).toList(),
             ),
-          IconButton(icon: Icon(Icons.code_rounded, color: cs.primary), tooltip: 'Snippets',
-            onPressed: () => Navigator.pushNamed(context, '/snippets',
-              arguments: _session != null
-                  ? (String cmd) => _session!.service.write(Uint8List.fromList('$cmd\n'.codeUnits))
-                  : null)),
           IconButton(icon: const Icon(Icons.close_rounded, color: Colors.red), tooltip: 'Disconnect',
             onPressed: () => _confirmDisconnect(context, mgr)),
         ],
