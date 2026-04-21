@@ -34,6 +34,16 @@ class _TerminalScreenState extends ConsumerState<TerminalScreen> {
     try {
       final mgr = ref.read(sessionManagerProvider);
       final settings = ref.read(settingsProvider);
+
+      // Check for existing session for this connection
+      final existing = mgr.activeSessions.where(
+        (s) => s.connection.id == widget.connection.id && s.isConnected,
+      );
+      if (existing.isNotEmpty) {
+        if (mounted) setState(() { _session = existing.first; _loading = false; });
+        return;
+      }
+
       final session = await mgr.createSession(
         widget.connection,
         keepAlive: settings.keepAlive,
@@ -42,13 +52,6 @@ class _TerminalScreenState extends ConsumerState<TerminalScreen> {
       );
       if (mounted) {
         setState(() { _session = session; _loading = false; });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Row(children: [
-            const Icon(Icons.check_circle_rounded, color: Colors.white, size: 18),
-            const SizedBox(width: 8),
-            Text('Connected to ${widget.connection.name}'),
-          ])),
-        );
       }
     } catch (e) {
       if (mounted) {
