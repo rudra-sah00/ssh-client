@@ -109,7 +109,7 @@ class _TerminalScreenState extends ConsumerState<TerminalScreen> {
               width: 8, height: 8,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: _session?.isConnected == true ? Colors.green.shade400 : Colors.grey,
+                color: _session?.isConnected == true ? Colors.white70 : Colors.grey,
               ),
             ),
             const SizedBox(width: 10),
@@ -136,7 +136,7 @@ class _TerminalScreenState extends ConsumerState<TerminalScreen> {
                     width: 8, height: 8,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: s.isConnected ? Colors.green.shade400 : Colors.red.shade400,
+                      color: s.isConnected ? Colors.white70 : Colors.red.shade400,
                     ),
                   ),
                   const SizedBox(width: 10),

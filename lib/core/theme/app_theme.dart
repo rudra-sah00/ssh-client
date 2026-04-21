@@ -4,19 +4,19 @@ import 'package:google_fonts/google_fonts.dart';
 
 abstract class AppTheme {
   static const _radius = 16.0;
-  static const _accent = Color(0xFF00E676); // terminal green
+  static const _accent = Color(0xFFB0B0B0);
 
-  static ThemeData get light => dark; // force dark always
+  static ThemeData get light => dark;
 
   static ThemeData get dark {
     final base = FlexThemeData.dark(
       colors: const FlexSchemeColor(
         primary: _accent,
-        primaryContainer: Color(0xFF002E14),
-        secondary: Color(0xFF80CBC4),
-        secondaryContainer: Color(0xFF1A3A36),
-        tertiary: Color(0xFF4DD0E1),
-        tertiaryContainer: Color(0xFF0D2F33),
+        primaryContainer: Color(0xFF2A2A2A),
+        secondary: Color(0xFF8E8E8E),
+        secondaryContainer: Color(0xFF222222),
+        tertiary: Color(0xFF9E9E9E),
+        tertiaryContainer: Color(0xFF1E1E1E),
       ),
       darkIsTrueBlack: true,
       surfaceMode: FlexSurfaceMode.level,

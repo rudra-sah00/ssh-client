@@ -273,7 +273,7 @@ class _ConnectionTile extends ConsumerWidget {
                         child: Container(
                           width: 10, height: 10,
                           decoration: BoxDecoration(
-                            color: Colors.green.shade400,
+                            color: Colors.white70,
                             shape: BoxShape.circle,
                             border: Border.all(color: cs.surface, width: 1.5),
                           ),
@@ -298,11 +298,11 @@ class _ConnectionTile extends ConsumerWidget {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                           decoration: BoxDecoration(
-                            color: Colors.green.withValues(alpha: 0.15),
+                            color: Colors.white.withValues(alpha: 0.08),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text('${activeSessions.length} active',
-                              style: TextStyle(color: Colors.green.shade400, fontSize: 11, fontWeight: FontWeight.w600)),
+                              style: TextStyle(color: Colors.white70, fontSize: 11, fontWeight: FontWeight.w600)),
                         ),
                     ]),
                     const SizedBox(height: 3),

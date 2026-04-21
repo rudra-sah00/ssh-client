@@ -66,9 +66,9 @@ class _TunnelScreenState extends ConsumerState<TunnelScreen> {
                           height: 10,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: t.isActive ? Colors.green : Colors.grey,
+                            color: t.isActive ? Colors.white70 : Colors.grey,
                             boxShadow: t.isActive
-                                ? [BoxShadow(color: Colors.green.withValues(alpha: 0.4), blurRadius: 6, spreadRadius: 1)]
+                                ? [BoxShadow(color: Colors.white.withValues(alpha: 0.2), blurRadius: 6, spreadRadius: 1)]
                                 : null,
                           ),
                         ),

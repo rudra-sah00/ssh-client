@@ -47,7 +47,7 @@ class _AppShellState extends State<AppShell> {
         height: 60,
         circleWidth: 50,
         color: const Color(0xFF0F0F0F),
-        circleColor: const Color(0xFF00E676),
+        circleColor: const Color(0xFFB0B0B0),
         activeIndex: _index,
         onTap: (i) {
           setState(() => _index = i);
