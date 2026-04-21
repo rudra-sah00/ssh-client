@@ -40,11 +40,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(
+          SliverAppBar.large(
             pinned: true,
-            expandedHeight: 100,
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             surfaceTintColor: Colors.transparent,
+            title: const Text('Servers'),
             actions: [
               Padding(
                 padding: const EdgeInsets.only(right: 12),
@@ -54,10 +54,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
               ),
             ],
-            flexibleSpace: FlexibleSpaceBar(
-              titlePadding: const EdgeInsets.only(left: 20, bottom: 14),
-              title: Text('Servers', style: TextStyle(fontWeight: FontWeight.bold, color: cs.onSurface)),
-            ),
           ),
 
           // Search

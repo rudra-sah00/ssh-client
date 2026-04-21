@@ -14,15 +14,11 @@ class SessionsScreen extends ConsumerWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(
+          SliverAppBar.large(
             pinned: true,
-            expandedHeight: 100,
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             surfaceTintColor: Colors.transparent,
-            flexibleSpace: FlexibleSpaceBar(
-              titlePadding: const EdgeInsets.only(left: 20, bottom: 14),
-              title: Text('Sessions', style: TextStyle(fontWeight: FontWeight.bold, color: cs.onSurface)),
-            ),
+            title: const Text('Sessions'),
           ),
           if (sessions.isEmpty)
             SliverFillRemaining(
