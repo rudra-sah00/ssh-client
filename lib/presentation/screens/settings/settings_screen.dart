@@ -17,10 +17,18 @@ class SettingsScreen extends ConsumerWidget {
     final labelColor = isDark ? Colors.white54 : Colors.black54;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        children: [
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+                child: Text('Settings', style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface)),
+              ),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              sliver: SliverList(delegate: SliverChildListDelegate([
           // ── Theme ──
           _Card(
             color: cardColor,
@@ -179,7 +187,10 @@ class SettingsScreen extends ConsumerWidget {
           ),
 
           const SizedBox(height: 32),
-        ],
+        ])),
+            ),
+          ],
+        ),
       ),
     );
   }
