@@ -50,7 +50,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 padding: const EdgeInsets.only(right: 12),
                 child: GestureDetector(
                   onTap: () => _openAdd(),
-                  child: const Text('Add', style: TextStyle(color: Color(0xFF4A9EFF), fontSize: 17)),
+                  child: const Text('Add', style: TextStyle(color: Color(0xFF8E8E93), fontSize: 17)),
                 ),
               ),
             ],

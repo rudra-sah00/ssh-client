@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ssh_client/data/models/connection/connection_model.dart';
 import 'package:ssh_client/data/providers/providers.dart';
 
-const _accent = Color(0xFF4A9EFF);
+const _accent = Color(0xFF8E8E93);
 
 class AddEditConnectionScreen extends ConsumerStatefulWidget {
   final ConnectionModel? existing;

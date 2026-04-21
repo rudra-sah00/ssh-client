@@ -55,7 +55,7 @@ class SessionsScreen extends ConsumerWidget {
                           leading: Container(
                             width: 8, height: 8,
                             decoration: BoxDecoration(
-                              color: sessions[i].isConnected ? const Color(0xFF4A9EFF) : Colors.red,
+                              color: sessions[i].isConnected ? const Color(0xFF8E8E93) : Colors.red,
                               shape: BoxShape.circle,
                             ),
                           ),

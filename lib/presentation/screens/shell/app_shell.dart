@@ -24,16 +24,23 @@ class _AppShellState extends State<AppShell> {
           SettingsScreen(),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _index,
-        onTap: (i) => setState(() => _index = i),
-        selectedItemColor: const Color(0xFF4A9EFF),
-        unselectedItemColor: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.38),
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        type: BottomNavigationBarType.fixed,
-        selectedFontSize: 11,
-        unselectedFontSize: 11,
-        elevation: 0,
+      bottomNavigationBar: Theme(
+        data: Theme.of(context).copyWith(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          splashFactory: NoSplash.splashFactory,
+        ),
+        child: BottomNavigationBar(
+          currentIndex: _index,
+          onTap: (i) => setState(() => _index = i),
+          selectedItemColor: const Color(0xFF8E8E93),
+          unselectedItemColor: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.25),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          type: BottomNavigationBarType.fixed,
+          selectedFontSize: 11,
+          unselectedFontSize: 11,
+          elevation: 0,
+          enableFeedback: false,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.dns_outlined),
@@ -51,6 +58,7 @@ class _AppShellState extends State<AppShell> {
             label: 'Settings',
           ),
         ],
+        ),
       ),
     );
   }

@@ -4,14 +4,13 @@ import 'package:google_fonts/google_fonts.dart';
 
 abstract class AppTheme {
   static const _radius = 16.0;
-  static const _accent = Color(0xFFB0B0B0);
-  static const _blue = Color(0xFF4A9EFF);
+  static const _accent = Color(0xFF8E8E93);
 
   // ── Light ──
   static ThemeData get light {
     final base = FlexThemeData.light(
       colors: const FlexSchemeColor(
-        primary: _blue,
+        primary: _accent,
         primaryContainer: Color(0xFFE8F0FE),
         secondary: Color(0xFF6B6B6B),
         secondaryContainer: Color(0xFFEEEEEE),
@@ -46,7 +45,7 @@ abstract class AppTheme {
       bottomSheetTheme: base.bottomSheetTheme.copyWith(backgroundColor: Colors.white),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: Color(0xFFF2F2F7),
-        selectedItemColor: _blue,
+        selectedItemColor: _accent,
         unselectedItemColor: Color(0xFF999999),
       ),
       splashFactory: InkSparkle.splashFactory,
@@ -97,7 +96,7 @@ abstract class AppTheme {
       bottomSheetTheme: base.bottomSheetTheme.copyWith(backgroundColor: const Color(0xFF111111)),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: Colors.black,
-        selectedItemColor: _blue,
+        selectedItemColor: _accent,
         unselectedItemColor: Colors.white38,
       ),
       splashFactory: InkSparkle.splashFactory,

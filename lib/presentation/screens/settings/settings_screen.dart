@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ssh_client/data/providers/providers.dart';
 
-const _blue = Color(0xFF4A9EFF);
+const _grey = Color(0xFF8E8E93);
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -48,7 +48,7 @@ class SettingsScreen extends ConsumerWidget {
                 label: 'Light Mode',
                 selected: settings.themeMode == 'light',
                 onTap: () => notifier.update(settings.copyWith(themeMode: 'light')),
-                trailing: const Icon(Icons.wb_sunny_outlined, color: _blue, size: 20),
+                trailing: const Icon(Icons.wb_sunny_outlined, color: _grey, size: 20),
               ),
               _ThemeOption(
                 label: 'Dark Mode',
@@ -69,7 +69,7 @@ class SettingsScreen extends ConsumerWidget {
               Slider(
                 min: 8, max: 24, divisions: 16,
                 value: settings.terminalFontSize,
-                activeColor: _blue,
+                activeColor: _grey,
                 onChanged: (v) => notifier.update(settings.copyWith(terminalFontSize: v)),
               ),
             ],
@@ -90,7 +90,7 @@ class SettingsScreen extends ConsumerWidget {
                   const Text('Keep Alive'),
                   Switch.adaptive(
                     value: settings.keepAlive,
-                    activeColor: _blue,
+                    activeColor: _grey,
                     onChanged: (v) => notifier.update(settings.copyWith(keepAlive: v)),
                   ),
                 ],
@@ -100,7 +100,7 @@ class SettingsScreen extends ConsumerWidget {
                 Slider(
                   min: 5, max: 120, divisions: 23,
                   value: settings.keepAliveInterval.toDouble(),
-                  activeColor: _blue,
+                  activeColor: _grey,
                   onChanged: (v) => notifier.update(settings.copyWith(keepAliveInterval: v.round())),
                 ),
               ],
@@ -108,7 +108,7 @@ class SettingsScreen extends ConsumerWidget {
               Slider(
                 min: 5, max: 60, divisions: 11,
                 value: settings.connectionTimeout.toDouble(),
-                activeColor: _blue,
+                activeColor: _grey,
                 onChanged: (v) => notifier.update(settings.copyWith(connectionTimeout: v.round())),
               ),
               const Divider(height: 16),
@@ -121,7 +121,7 @@ class SettingsScreen extends ConsumerWidget {
               Slider(
                 min: 0, max: 480, divisions: 16,
                 value: settings.maxSessionMinutes.toDouble(),
-                activeColor: _blue,
+                activeColor: _grey,
                 onChanged: (v) => notifier.update(settings.copyWith(maxSessionMinutes: v.round())),
               ),
             ],
@@ -140,7 +140,7 @@ class SettingsScreen extends ConsumerWidget {
                 onTap: () => Navigator.pushNamed(context, '/snippets'),
                 child: const Padding(
                   padding: EdgeInsets.symmetric(vertical: 8),
-                  child: Text('Manage Snippets', style: TextStyle(color: _blue, fontSize: 16)),
+                  child: Text('Manage Snippets', style: TextStyle(color: _grey, fontSize: 16)),
                 ),
               ),
             ],
@@ -163,14 +163,14 @@ class SettingsScreen extends ConsumerWidget {
                 },
                 child: const Padding(
                   padding: EdgeInsets.symmetric(vertical: 8),
-                  child: Text('Export Connections', style: TextStyle(color: _blue, fontSize: 16)),
+                  child: Text('Export Connections', style: TextStyle(color: _grey, fontSize: 16)),
                 ),
               ),
               GestureDetector(
                 onTap: () => _showImportDialog(context, ref),
                 child: const Padding(
                   padding: EdgeInsets.symmetric(vertical: 8),
-                  child: Text('Import Connections', style: TextStyle(color: _blue, fontSize: 16)),
+                  child: Text('Import Connections', style: TextStyle(color: _grey, fontSize: 16)),
                 ),
               ),
             ],
@@ -290,7 +290,7 @@ class _ThemeOption extends StatelessWidget {
                 label,
                 style: TextStyle(
                   fontSize: 16,
-                  color: selected ? _blue : null,
+                  color: selected ? _grey : null,
                   fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
                 ),
               ),
