@@ -15,21 +15,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   String _search = '';
 
   void _openAddSheet([ConnectionModel? existing]) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      useSafeArea: true,
-      builder: (_) => DraggableScrollableSheet(
-        initialChildSize: 0.9,
-        minChildSize: 0.5,
-        maxChildSize: 0.95,
-        expand: false,
-        builder: (_, controller) => AddEditConnectionScreen(
-          existing: existing,
-          scrollController: controller,
-        ),
-      ),
-    );
+    Navigator.push(context, MaterialPageRoute(
+      builder: (_) => AddEditConnectionScreen(existing: existing),
+    ));
   }
 
   @override
