@@ -42,24 +42,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Top bar
+            // Title + Add
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  Text('Servers', style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold, color: cs.onSurface)),
                   GestureDetector(
                     onTap: () => _openAdd(),
                     child: const Text('Add', style: TextStyle(color: Color(0xFF4A9EFF), fontSize: 17)),
                   ),
                 ],
               ),
-            ),
-
-            // Title
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
-              child: Text('Servers', style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold, color: cs.onSurface)),
             ),
 
             // Search

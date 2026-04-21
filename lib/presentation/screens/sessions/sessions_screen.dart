@@ -16,7 +16,7 @@ class SessionsScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
               child: Text('Sessions', style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold, color: cs.onSurface)),
