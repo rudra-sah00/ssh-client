@@ -314,6 +314,7 @@ class _TerminalScreenState extends ConsumerState<TerminalScreen> with WidgetsBin
                 ),
           autofocus: true,
           deleteDetection: true,
+          keyboardType: TextInputType.text,
         ),
       ),
       TerminalControlBar(
