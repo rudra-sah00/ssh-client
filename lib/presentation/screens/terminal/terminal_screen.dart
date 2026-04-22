@@ -71,11 +71,6 @@ class _TerminalScreenState extends ConsumerState<TerminalScreen> with WidgetsBin
       if (mounted) {
         setState(() { _session = session; });
         terminal.write('\x1b[32m[Reconnected]\x1b[0m\r\n');
-
-        // Try to reattach tmux if available
-        session.service.write(Uint8List.fromList(
-          'command -v tmux >/dev/null && tmux has-session 2>/dev/null && tmux attach || true\n'.codeUnits,
-        ));
       }
     } catch (e) {
       if (mounted) {

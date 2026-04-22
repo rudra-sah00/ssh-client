@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
@@ -66,7 +67,7 @@ class SessionManager extends ChangeNotifier {
     await sshService.connect(connection);
 
     sshService.output.listen((data) {
-      terminal.write(String.fromCharCodes(data));
+      terminal.write(utf8.decode(data, allowMalformed: true));
     });
 
     terminal.onOutput = (data) {
@@ -105,7 +106,7 @@ class SessionManager extends ChangeNotifier {
     await sshService.connect(connection);
 
     sshService.output.listen((data) {
-      terminal.write(String.fromCharCodes(data));
+      terminal.write(utf8.decode(data, allowMalformed: true));
     });
 
     terminal.onOutput = (data) {
